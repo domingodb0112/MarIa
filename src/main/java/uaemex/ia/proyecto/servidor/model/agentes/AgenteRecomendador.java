@@ -18,6 +18,9 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Agente que recomienda discos del catalogo externo segun el perfil del usuario.
+ */
 public class AgenteRecomendador {
 
     private static final Logger LOGGER = Logger.getLogger(AgenteRecomendador.class.getName());
@@ -27,12 +30,22 @@ public class AgenteRecomendador {
     private final Gson gson = new Gson();
     private final List<Disco> catalogoClasico;
 
+    /**
+     * Carga el catalogo base de recomendaciones al crear el agente.
+     */
     public AgenteRecomendador() {
         this.catalogoClasico = cargarCatalogo();
         LOGGER.info(() -> "Catalogo de recomendaciones cargado: "
                 + catalogoClasico.size() + " album(es).");
     }
 
+    /**
+     * Genera recomendaciones evitando discos que el usuario ya tiene registrados.
+     *
+     * @param perfil perfil de gustos calculado por el analizador.
+     * @param coleccionUsuario coleccion actual del usuario.
+     * @return lista limitada de discos recomendados.
+     */
     public List<Disco> recomendar(PerfilGustos perfil, List<Disco> coleccionUsuario) {
         Set<String> discosExistentes = crearIndiceColeccion(coleccionUsuario);
         List<DiscoPuntuado> candidatos = new ArrayList<>();
@@ -40,11 +53,13 @@ public class AgenteRecomendador {
         for (int i = 0; i < catalogoClasico.size(); i++) {
             Disco disco = catalogoClasico.get(i);
             if (!discosExistentes.contains(claveDisco(disco))) {
+                // La posicion original sirve como desempate suave para conservar prioridad editorial.
                 double puntaje = calcularPuntaje(perfil, disco, i);
                 candidatos.add(new DiscoPuntuado(disco, puntaje));
             }
         }
 
+        // Se ordena por puntaje descendente y luego por datos estables para resultados repetibles.
         candidatos.sort(Comparator
                 .comparingDouble(DiscoPuntuado::getPuntaje).reversed()
                 .thenComparing(d -> d.getDisco().getGenero())
@@ -60,6 +75,11 @@ public class AgenteRecomendador {
         return recomendaciones;
     }
 
+    /**
+     * Carga el catalogo de discos recomendables desde data/catalogo.json.
+     *
+     * @return catalogo disponible o lista vacia si el archivo no existe o falla.
+     */
     private List<Disco> cargarCatalogo() {
         File archivo = new File(ARCHIVO_CATALOGO);
         if (!archivo.exists()) {
@@ -78,6 +98,14 @@ public class AgenteRecomendador {
         }
     }
 
+    /**
+     * Calcula el puntaje de un disco candidato frente al perfil del usuario.
+     *
+     * @param perfil perfil calculado con la coleccion del usuario.
+     * @param disco disco candidato del catalogo.
+     * @param posicionCatalogo posicion original en el archivo para desempate.
+     * @return puntaje mayor para candidatos mas recomendables.
+     */
     private double calcularPuntaje(PerfilGustos perfil, Disco disco, int posicionCatalogo) {
         if (perfil == null || perfil.getTotalDiscos() == 0) {
             return 1.0 - (posicionCatalogo * 0.01);
@@ -87,11 +115,13 @@ public class AgenteRecomendador {
         double porcentajeGenero = 0.0;
         for (String generoPerfil : perfil.getPorcentajePorGenero().keySet()) {
             if (SimilarityUtils.normalizar(generoPerfil).equals(genero)) {
+                // Se usa el porcentaje del perfil cuando el genero del candidato coincide.
                 porcentajeGenero = perfil.getPorcentajePorGenero().get(generoPerfil);
                 break;
             }
         }
 
+        // Combina afinidad por genero favorito, diversidad y desempate del catalogo.
         double bonoGeneroFavorito = SimilarityUtils.normalizar(perfil.getGeneroFavorito()).equals(genero)
                 ? 15.0 : 0.0;
         double bonoDiversidad = porcentajeGenero == 0.0 ? 5.0 : 0.0;
@@ -99,6 +129,12 @@ public class AgenteRecomendador {
         return porcentajeGenero + bonoGeneroFavorito + bonoDiversidad + desempateCatalogo;
     }
 
+    /**
+     * Construye un indice de discos existentes para evitar recomendaciones duplicadas.
+     *
+     * @param coleccionUsuario discos actuales del usuario.
+     * @return claves normalizadas titulo-artista.
+     */
     private Set<String> crearIndiceColeccion(List<Disco> coleccionUsuario) {
         Set<String> indice = new HashSet<>();
         for (Disco disco : coleccionUsuario) {
@@ -107,6 +143,12 @@ public class AgenteRecomendador {
         return indice;
     }
 
+    /**
+     * Genera una clave comparable para identificar un disco por titulo y artista.
+     *
+     * @param disco disco a indexar.
+     * @return clave normalizada.
+     */
     private String claveDisco(Disco disco) {
         return SimilarityUtils.normalizar(disco.getTitulo()) + "|"
                 + SimilarityUtils.normalizar(disco.getArtista());

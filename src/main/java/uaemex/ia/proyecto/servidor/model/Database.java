@@ -16,6 +16,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Repositorio en memoria con persistencia JSON para la coleccion de discos.
+ * Usa singleton para compartir una unica coleccion entre todos los hilos del servidor.
+ */
 public class Database {
 
     private static final Logger LOGGER = Logger.getLogger(Database.class.getName());
@@ -25,13 +29,21 @@ public class Database {
     private final Gson gson;
     private final List<Disco> coleccion;
 
+    /**
+     * Carga la coleccion desde disco al crear la instancia unica.
+     */
     private Database() {
         gson = new GsonBuilder().setPrettyPrinting().create();
         coleccion = cargarDesdeArchivo();
         LOGGER.info(() -> "Coleccion cargada: " + coleccion.size() + " disco(s).");
     }
 
-    // Double-checked locking para singleton thread-safe
+    /**
+     * Obtiene la instancia unica de la base local.
+     * Usa double-checked locking para inicializar de forma segura en ambiente multihilo.
+     *
+     * @return repositorio compartido.
+     */
     public static Database getInstance() {
         if (instancia == null) {
             synchronized (Database.class) {
@@ -43,16 +55,31 @@ public class Database {
         return instancia;
     }
 
+    /**
+     * Agrega un disco a la coleccion y persiste inmediatamente el archivo JSON.
+     *
+     * @param disco disco a guardar.
+     */
     public synchronized void guardar(Disco disco) {
         coleccion.add(disco);
         persistir();
         LOGGER.info(() -> "Disco guardado: " + disco);
     }
 
+    /**
+     * Devuelve una copia de la coleccion para evitar modificaciones externas directas.
+     *
+     * @return lista nueva con los discos actuales.
+     */
     public synchronized List<Disco> obtenerTodos() {
         return new ArrayList<>(coleccion);
     }
 
+    /**
+     * Lee la coleccion desde data/coleccion.json si el archivo existe.
+     *
+     * @return lista cargada o lista vacia si no hay datos validos.
+     */
     private List<Disco> cargarDesdeArchivo() {
         File archivo = new File(ARCHIVO);
         if (!archivo.exists()) {
@@ -69,6 +96,9 @@ public class Database {
         }
     }
 
+    /**
+     * Escribe la coleccion completa a un archivo temporal y luego reemplaza el destino.
+     */
     private void persistir() {
         File directorio = new File("data");
         directorio.mkdirs();
@@ -84,6 +114,7 @@ public class Database {
         }
 
         try {
+            // Primero se escribe en temporal; asi se reduce el riesgo de dejar JSON incompleto.
             Files.move(temporal, destino,
                     StandardCopyOption.REPLACE_EXISTING,
                     StandardCopyOption.ATOMIC_MOVE);
@@ -95,6 +126,12 @@ public class Database {
         }
     }
 
+    /**
+     * Reemplaza el archivo final cuando el sistema de archivos no soporta movimiento atomico.
+     *
+     * @param temporal archivo recien escrito.
+     * @param destino archivo definitivo de la coleccion.
+     */
     private void reemplazarSinAtomicMove(Path temporal, Path destino) {
         try {
             if (Files.exists(temporal)) {
