@@ -1,0 +1,114 @@
+[
+  {
+    "titulo": "The Dark Side of the Moon",
+    "artista": "Pink Floyd",
+    "anio": 1973,
+    "genero": "Rock",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Abbey Road",
+    "artista": "The Beatles",
+    "anio": 1969,
+    "genero": "Rock",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Rumours",
+    "artista": "Fleetwood Mac",
+    "anio": 1977,
+    "genero": "Rock",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Nevermind",
+    "artista": "Nirvana",
+    "anio": 1991,
+    "genero": "Rock",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Thriller",
+    "artista": "Michael Jackson",
+    "anio": 1982,
+    "genero": "Pop",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Like a Virgin",
+    "artista": "Madonna",
+    "anio": 1984,
+    "genero": "Pop",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Purple Rain",
+    "artista": "Prince",
+    "anio": 1984,
+    "genero": "Pop",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Back to Black",
+    "artista": "Amy Winehouse",
+    "anio": 2006,
+    "genero": "Pop",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Kind of Blue",
+    "artista": "Miles Davis",
+    "anio": 1959,
+    "genero": "Jazz",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "A Love Supreme",
+    "artista": "John Coltrane",
+    "anio": 1965,
+    "genero": "Jazz",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Time Out",
+    "artista": "The Dave Brubeck Quartet",
+    "anio": 1959,
+    "genero": "Jazz",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Head Hunters",
+    "artista": "Herbie Hancock",
+    "anio": 1973,
+    "genero": "Jazz",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Master of Puppets",
+    "artista": "Metallica",
+    "anio": 1986,
+    "genero": "Metal",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Paranoid",
+    "artista": "Black Sabbath",
+    "anio": 1970,
+    "genero": "Metal",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "The Number of the Beast",
+    "artista": "Iron Maiden",
+    "anio": 1982,
+    "genero": "Metal",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Reign in Blood",
+    "artista": "Slayer",
+    "anio": 1986,
+    "genero": "Metal",
+    "formato": "CD"
+  }
+]

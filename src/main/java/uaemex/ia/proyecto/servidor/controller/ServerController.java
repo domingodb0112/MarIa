@@ -5,8 +5,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServerController {
+
+    private static final Logger LOGGER = Logger.getLogger(ServerController.class.getName());
 
     private final int puerto;
     private final ExecutorService pool;
@@ -17,17 +21,17 @@ public class ServerController {
     }
 
     public void iniciar() {
-        System.out.println("[Servidor] Iniciando en puerto " + puerto + "...");
+        LOGGER.info(() -> "Iniciando en puerto " + puerto + "...");
         try (ServerSocket serverSocket = new ServerSocket(puerto)) {
-            System.out.println("[Servidor] Listo. Esperando conexiones...");
+            LOGGER.info("Listo. Esperando conexiones...");
             while (true) {
                 Socket clienteSocket = serverSocket.accept();
-                System.out.println("[Servidor] Nueva conexión desde: "
+                LOGGER.info(() -> "Nueva conexion desde: "
                         + clienteSocket.getInetAddress().getHostAddress());
                 pool.execute(new ManejadorCliente(clienteSocket));
             }
         } catch (IOException e) {
-            System.err.println("[Servidor] Error fatal: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Error fatal en el servidor.", e);
         } finally {
             pool.shutdown();
         }

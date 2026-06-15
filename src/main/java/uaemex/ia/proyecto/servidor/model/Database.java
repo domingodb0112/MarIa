@@ -7,11 +7,18 @@ import uaemex.ia.proyecto.compartido.Disco;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.file.AtomicMoveNotSupportedException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Database {
 
+    private static final Logger LOGGER = Logger.getLogger(Database.class.getName());
     private static final String ARCHIVO = "data/coleccion.json";
     private static volatile Database instancia;
 
@@ -21,7 +28,7 @@ public class Database {
     private Database() {
         gson = new GsonBuilder().setPrettyPrinting().create();
         coleccion = cargarDesdeArchivo();
-        System.out.println("[Database] Colección cargada: " + coleccion.size() + " disco(s).");
+        LOGGER.info(() -> "Coleccion cargada: " + coleccion.size() + " disco(s).");
     }
 
     // Double-checked locking para singleton thread-safe
@@ -39,7 +46,7 @@ public class Database {
     public synchronized void guardar(Disco disco) {
         coleccion.add(disco);
         persistir();
-        System.out.println("[Database] Disco guardado: " + disco);
+        LOGGER.info(() -> "Disco guardado: " + disco);
     }
 
     public synchronized List<Disco> obtenerTodos() {
@@ -57,17 +64,44 @@ public class Database {
             List<Disco> lista = gson.fromJson(reader, tipo);
             return lista != null ? lista : new ArrayList<>();
         } catch (IOException e) {
-            System.err.println("[Database] Error al cargar: " + e.getMessage());
+            LOGGER.log(Level.WARNING, "Error al cargar la coleccion.", e);
             return new ArrayList<>();
         }
     }
 
     private void persistir() {
-        new File("data").mkdirs();
-        try (Writer writer = new FileWriter(ARCHIVO)) {
+        File directorio = new File("data");
+        directorio.mkdirs();
+        Path destino = new File(ARCHIVO).toPath();
+        Path temporal = new File(directorio, "coleccion.json.tmp").toPath();
+
+        try (Writer writer = new FileWriter(temporal.toFile())) {
             gson.toJson(coleccion, writer);
+            writer.flush();
         } catch (IOException e) {
-            System.err.println("[Database] Error al persistir: " + e.getMessage());
+            LOGGER.log(Level.WARNING, "Error al escribir el archivo temporal de la coleccion.", e);
+            return;
+        }
+
+        try {
+            Files.move(temporal, destino,
+                    StandardCopyOption.REPLACE_EXISTING,
+                    StandardCopyOption.ATOMIC_MOVE);
+        } catch (AtomicMoveNotSupportedException e) {
+            LOGGER.log(Level.WARNING, "Movimiento atomico no soportado; intentando reemplazo seguro.", e);
+            reemplazarSinAtomicMove(temporal, destino);
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Error al reemplazar la coleccion con el archivo temporal.", e);
+        }
+    }
+
+    private void reemplazarSinAtomicMove(Path temporal, Path destino) {
+        try {
+            if (Files.exists(temporal)) {
+                Files.move(temporal, destino, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Error al persistir la coleccion.", e);
         }
     }
 }

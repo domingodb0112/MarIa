@@ -8,9 +8,11 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.logging.Logger;
 
 public class ClientController {
 
+    private static final Logger LOGGER = Logger.getLogger(ClientController.class.getName());
     private static final int CONNECT_TIMEOUT_MS = 5000;
     private static final int READ_TIMEOUT_MS = 7000;
 
@@ -35,7 +37,7 @@ public class ClientController {
         socket = nuevoSocket;
         salida = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
         entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        System.out.println("[Cliente] Conectado a " + host + ":" + puerto);
+        LOGGER.info(() -> "Conectado a " + host + ":" + puerto);
     }
 
     public RespuestaSocket enviarMensaje(MensajeSocket mensaje) throws IOException {
@@ -44,7 +46,7 @@ public class ClientController {
         }
 
         String json = gson.toJson(mensaje);
-        System.out.println("[Cliente] Enviando: " + json);
+        LOGGER.fine(() -> "Enviando: " + json);
         salida.println(json);
         if (salida.checkError()) {
             desconectar();
@@ -63,7 +65,7 @@ public class ClientController {
             desconectar();
             throw new IOException("El servidor cerro la conexion.");
         }
-        System.out.println("[Cliente] Respuesta: " + jsonRespuesta);
+        LOGGER.fine(() -> "Respuesta: " + jsonRespuesta);
         return gson.fromJson(jsonRespuesta, RespuestaSocket.class);
     }
 
@@ -75,7 +77,7 @@ public class ClientController {
         if (socket != null && !socket.isClosed()) {
             try {
                 socket.close();
-                System.out.println("[Cliente] Desconectado.");
+                LOGGER.info("Desconectado.");
             } catch (IOException ignored) {
             }
         }
