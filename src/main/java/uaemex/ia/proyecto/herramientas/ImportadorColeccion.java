@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import uaemex.ia.proyecto.compartido.Disco;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -14,19 +13,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
  * Genera la base local de discos usada por el servidor para pruebas de busqueda,
  * perfilado de gustos y recomendaciones.
  *
- * <p>El flujo intenta primero leer titulos desde un TSV externo. Si ese archivo
- * no trae nombres de album utilizables, como ocurre con el dump local
- * {@code work_alias}, se usa el catalogo curado interno hispanohablante,
- * del cual se seleccionan 500 albumes por defecto. La seleccion esta
- * balanceada en cuatro generos principales: Rock en Espanol, Pop Latino,
- * Salsa y Cumbia.
+ * <p>El flujo usa un catalogo curado interno hispanohablante, del cual se
+ * seleccionan 500 albumes por defecto. La seleccion esta balanceada en cuatro
+ * generos principales: Rock en Espanol, Pop Latino, Salsa y Cumbia.
  *
  * <p>Uso:
  * mvn exec:java -Dexec.mainClass="uaemex.ia.proyecto.herramientas.ImportadorColeccion"
@@ -37,134 +32,35 @@ import java.util.Map;
  */
 public class ImportadorColeccion {
 
-    private static final Path TSV_POR_DEFECTO = Paths.get("20110711-update", "mbdump", "work_alias");
     private static final Path JSON_POR_DEFECTO = Paths.get("data", "coleccion.json");
     private static final int LIMITE_POR_DEFECTO = 500;
 
-    private static final String[] ARTISTAS_SINTETICOS = {
-            "The Meridian Echoes", "Luna Norte", "Velvet Radio", "Casa Prisma",
-            "Electric Avenida", "The Quiet Signals", "Mar de Fondo", "Neon Magnolia",
-            "Atlas Club", "Sofia Valdez", "The Analog Saints", "Rio Seco Ensemble"
-    };
-
-    private static final String[] GENEROS_SINTETICOS = {
-            "Rock", "Pop", "Jazz", "Soul", "Electronica", "Indie", "Folk",
-            "Hip-Hop", "Blues", "R&B", "Metal", "Punk"
-    };
-
-    private static final String[] FORMATOS = {"CD", "Vinilo"};
-
+    /**
+     * Punto de entrada de la herramienta de generacion de datos.
+     *
+     * <p>Lee argumentos simples, construye la coleccion curada y reemplaza el
+     * JSON de salida. No arranca el servidor ni modifica la base en memoria; solo
+     * prepara el archivo que luego carga {@code Database}.
+     *
+     * @param args argumentos opcionales: {@code --limit N} y {@code --output ruta}.
+     * @throws IOException si no se puede escribir el archivo JSON de destino.
+     */
     public static void main(String[] args) throws IOException {
         Opciones opciones = Opciones.desde(args);
-        List<Disco> discos = new ArrayList<>();
-
-        // El importador conserva soporte para un TSV real con titulos textuales.
-        // En el dump MusicBrainz local, work_alias contiene IDs, fechas y codigos
-        // de idioma, asi que normalmente no produce discos por esta ruta.
-        if (Files.exists(opciones.tsvEntrada)) {
-            List<String> titulos = leerTitulosDesdeTsv(opciones.tsvEntrada, opciones.limite);
-            for (String titulo : titulos) {
-                discos.add(sintetizarDisco(titulo));
-            }
-            System.out.println("Titulos importados desde TSV: " + titulos.size());
-        } else {
-            System.out.println("No existe TSV de entrada: " + opciones.tsvEntrada);
-        }
-
-        // Fallback principal del proyecto: una base curada en espanol, de la
-        // cual se toman 500 albumes balanceados por defecto para que las
-        // busquedas no dependan de Internet ni de una importacion completa de
-        // MusicBrainz/PostgreSQL.
-        if (discos.isEmpty() && opciones.usarCatalogoCurado) {
-            discos.addAll(crearCatalogoCurado(opciones.limite));
-            System.out.println("El TSV no contiene titulos textuales; usando catalogo curado.");
-        }
-
-        if (discos.isEmpty()) {
-            throw new IllegalStateException("No se generaron discos. Revise el TSV o use el catalogo curado.");
-        }
+        List<Disco> discos = crearCatalogoCurado(opciones.limite);
 
         escribirJson(opciones.jsonSalida, discos);
         System.out.println("Coleccion escrita en " + opciones.jsonSalida + " con " + discos.size() + " discos.");
     }
 
-    private static List<String> leerTitulosDesdeTsv(Path archivo, int limite) throws IOException {
-        Map<String, String> titulos = new LinkedHashMap<>();
-        try (BufferedReader reader = Files.newBufferedReader(archivo, StandardCharsets.UTF_8)) {
-            String linea;
-            while ((linea = reader.readLine()) != null && titulos.size() < limite) {
-                String titulo = extraerTitulo(linea);
-                if (!titulo.isEmpty()) {
-                    titulos.putIfAbsent(clave(titulo), titulo);
-                }
-            }
-        }
-        return new ArrayList<>(titulos.values());
-    }
-
-    private static String extraerTitulo(String linea) {
-        String[] columnas = linea.split("\\t");
-        for (int i = columnas.length - 1; i >= 0; i--) {
-            String valor = limpiarTitulo(columnas[i]);
-            if (pareceTitulo(valor)) {
-                return valor;
-            }
-        }
-        return "";
-    }
-
-    private static String limpiarTitulo(String valor) {
-        if (valor == null) {
-            return "";
-        }
-        String limpio = valor.trim();
-        if (limpio.startsWith("\"") && limpio.endsWith("\"") && limpio.length() > 1) {
-            limpio = limpio.substring(1, limpio.length() - 1);
-        }
-        return limpio.replace("\\N", "").trim();
-    }
-
-    private static boolean pareceTitulo(String valor) {
-        if (valor.length() < 2 || valor.length() > 90) {
-            return false;
-        }
-        if (valor.matches("-?\\d+(\\.\\d+)?")) {
-            return false;
-        }
-        if (valor.matches("\\d{4}-\\d{2}-\\d{2}.*")) {
-            return false;
-        }
-        if (valor.matches("[a-z]{2}(_[A-Za-z]{2,5})?")) {
-            return false;
-        }
-        // Aceptar solo valores con suficiente texto evita que IDs, fechas y
-        // metadatos tecnicos del TSV terminen como titulos falsos.
-        int letras = 0;
-        for (int i = 0; i < valor.length(); i++) {
-            if (Character.isLetter(valor.charAt(i))) {
-                letras++;
-            }
-        }
-        return letras >= Math.max(2, valor.length() / 3);
-    }
-
-    private static Disco sintetizarDisco(String titulo) {
-        int hash = Math.abs(clave(titulo).hashCode());
-        String artista = ARTISTAS_SINTETICOS[hash % ARTISTAS_SINTETICOS.length];
-        String genero = GENEROS_SINTETICOS[(hash / 7) % GENEROS_SINTETICOS.length];
-        String formato = FORMATOS[(hash / 13) % FORMATOS.length];
-        int anio = 1965 + (hash % 60);
-        return new Disco(titulo, artista, anio, genero, formato);
-    }
-
     /**
      * Construye el catalogo hispanohablante usado para poblar data/coleccion.json.
      *
-     * <p>Cada linea usa el formato compacto:
-     * {@code titulo<TAB>artista<TAB>anio<TAB>genero}. El formato fisico se
-     * calcula de forma determinista: albumes previos a 1990 se marcan como
-     * Vinilo y los de 1990 en adelante como CD. Esta regla mantiene variedad
-     * historica sin tener que repetir una quinta columna en cientos de entradas.
+     * <p>Cada linea usa cuatro campos separados por tabuladores:
+     * {@code titulo, artista, anio, genero}. El formato fisico se calcula de
+     * forma determinista: albumes previos a 1990 se marcan como Vinilo y los de
+     * 1990 en adelante como CD. Esta regla mantiene variedad historica sin tener
+     * que repetir una quinta columna en cientos de entradas.
      *
      * @param limite cantidad maxima de discos a devolver.
      * @return lista balanceada por genero, lista para serializarse como JSON.
@@ -926,9 +822,9 @@ public class ImportadorColeccion {
         }
 
         // Se toma el elemento N de cada genero antes de avanzar al siguiente N.
-        // Asi, aunque el TSV interno este agrupado por genero, el JSON final
-        // queda repartido y las pruebas de busqueda/recomendacion ven diversidad
-        // desde los primeros registros.
+        // Asi, aunque el catalogo interno este agrupado por genero, el JSON
+        // final queda repartido y las pruebas de busqueda/recomendacion ven
+        // diversidad desde los primeros registros.
         List<Disco> seleccion = new ArrayList<>();
         int indice = 0;
         while (seleccion.size() < limite && seleccion.size() < discos.size()) {
@@ -947,11 +843,31 @@ public class ImportadorColeccion {
         return seleccion;
     }
 
+    /**
+     * Agrega un disco al catalogo en construccion.
+     *
+     * @param discos lista mutable donde se acumulan los albumes.
+     * @param titulo titulo del album.
+     * @param artista artista principal o agrupacion.
+     * @param anio anio de publicacion.
+     * @param genero genero normalizado usado por los agentes.
+     * @param formato formato fisico asignado para la coleccion.
+     */
     private static void agregar(List<Disco> discos, String titulo, String artista, int anio,
             String genero, String formato) {
         discos.add(new Disco(titulo, artista, anio, genero, formato));
     }
 
+    /**
+     * Serializa la coleccion completa en JSON legible para humanos.
+     *
+     * <p>Se crean los directorios necesarios antes de escribir, de modo que
+     * tambien funciona con rutas alternativas pasadas por {@code --output}.
+     *
+     * @param destino ruta del archivo JSON a escribir.
+     * @param discos discos ya seleccionados y ordenados.
+     * @throws IOException si falla la creacion de directorios o la escritura.
+     */
     private static void escribirJson(Path destino, List<Disco> discos) throws IOException {
         Files.createDirectories(destino.toAbsolutePath().getParent());
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -960,28 +876,31 @@ public class ImportadorColeccion {
         }
     }
 
-    private static String clave(String valor) {
-        return valor == null ? "" : valor.trim().toLowerCase(Locale.ROOT);
-    }
-
+    /**
+     * Opciones de ejecucion de la herramienta.
+     *
+     * <p>Se mantiene deliberadamente pequena para no introducir dependencias de
+     * CLI: el proyecto solo necesita cambiar la ruta de salida o limitar la
+     * cantidad de discos generados.
+     */
     private static class Opciones {
-        private Path tsvEntrada = TSV_POR_DEFECTO;
         private Path jsonSalida = JSON_POR_DEFECTO;
         private int limite = LIMITE_POR_DEFECTO;
-        private boolean usarCatalogoCurado = true;
 
+        /**
+         * Interpreta argumentos de linea de comandos conocidos.
+         *
+         * @param args arreglo recibido por {@link ImportadorColeccion#main(String[])}.
+         * @return opciones con valores por defecto o sobrescritos.
+         */
         private static Opciones desde(String[] args) {
             Opciones opciones = new Opciones();
             for (int i = 0; i < args.length; i++) {
                 String arg = args[i];
-                if ("--input".equals(arg) && i + 1 < args.length) {
-                    opciones.tsvEntrada = Paths.get(args[++i]);
-                } else if ("--output".equals(arg) && i + 1 < args.length) {
+                if ("--output".equals(arg) && i + 1 < args.length) {
                     opciones.jsonSalida = Paths.get(args[++i]);
                 } else if ("--limit".equals(arg) && i + 1 < args.length) {
                     opciones.limite = Math.max(1, Integer.parseInt(args[++i]));
-                } else if ("--no-fallback".equals(arg)) {
-                    opciones.usarCatalogoCurado = false;
                 }
             }
             return opciones;

@@ -91,7 +91,7 @@ La base actual está balanceada así:
 *   125 álbumes de `Salsa`.
 *   125 álbumes de `Cumbia`.
 
-El importador intenta leer primero `20110711-update/mbdump/work_alias`, pero ese dump local no contiene títulos de álbum directamente utilizables. Por eso, en la práctica usa el catálogo curado interno. Si se cambia el límite por línea de comandos, la herramienta conserva el orden balanceado por género hasta llegar al número solicitado.
+El importador usa un catálogo curado interno y no requiere archivos externos. Si se cambia el límite por línea de comandos, la herramienta conserva el orden balanceado por género hasta llegar al número solicitado.
 
 Comandos útiles de verificación:
 

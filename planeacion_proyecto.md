@@ -182,9 +182,9 @@ Cada registro se serializa con la estructura compartida `Disco`: `titulo`, `arti
 
 ### 6.1 Flujo del importador
 
-`ImportadorColeccion` conserva soporte para leer títulos desde un TSV externo, por defecto `20110711-update/mbdump/work_alias`. Sin embargo, el archivo local de MusicBrainz contiene principalmente IDs, fechas y códigos de idioma, no títulos de álbum completos. Cuando no se detectan títulos textuales útiles, la herramienta usa el catálogo curado interno.
+`ImportadorColeccion` genera la colección directamente desde un catálogo curado interno. Esto evita depender de descargas externas o de una importación previa de bases musicales completas.
 
-El catálogo interno se mantiene como líneas TSV dentro del código para que sea fácil auditar y ampliar entradas:
+El catálogo interno se mantiene como líneas delimitadas por tabuladores dentro del código para que sea fácil auditar y ampliar entradas:
 
 ```text
 titulo<TAB>artista<TAB>anio<TAB>genero
