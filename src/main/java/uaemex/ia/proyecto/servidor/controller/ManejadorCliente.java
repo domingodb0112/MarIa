@@ -38,6 +38,12 @@ public class ManejadorCliente implements Runnable {
         String direccion = socket.getInetAddress().getHostAddress();
         LOGGER.info(() -> "Hilo iniciado para cliente: " + direccion);
 
+        try {
+            socket.setSoTimeout(60000); // 60-second read timeout to clean up idle/dead connections
+        } catch (IOException e) {
+            LOGGER.warning(() -> "No se pudo establecer soTimeout para " + direccion + ": " + e.getMessage());
+        }
+
         try (
             BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter salida = new PrintWriter(socket.getOutputStream(), true)

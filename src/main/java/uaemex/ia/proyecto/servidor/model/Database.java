@@ -123,6 +123,10 @@ public class Database {
             reemplazarSinAtomicMove(temporal, destino);
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Error al reemplazar la coleccion con el archivo temporal.", e);
+        } finally {
+            try {
+                Files.deleteIfExists(temporal);
+            } catch (IOException ignored) {}
         }
     }
 

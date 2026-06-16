@@ -27,16 +27,16 @@ public class AgenteRecomendador {
     private static final int MAX_RECOMENDACIONES = 8;
     private static final String ARCHIVO_CATALOGO = "data/catalogo.json";
 
-    private final Gson gson = new Gson();
+    // Static cache for the catalog to avoid parsing JSON and reading files on every client connection
+    private static final List<Disco> CATALOGO_CACHE = cargarCatalogoEstatico();
+
     private final List<Disco> catalogoClasico;
 
     /**
      * Carga el catalogo base de recomendaciones al crear el agente.
      */
     public AgenteRecomendador() {
-        this.catalogoClasico = cargarCatalogo();
-        LOGGER.info(() -> "Catalogo de recomendaciones cargado: "
-                + catalogoClasico.size() + " album(es).");
+        this.catalogoClasico = CATALOGO_CACHE;
     }
 
     /**
@@ -76,25 +76,31 @@ public class AgenteRecomendador {
     }
 
     /**
-     * Carga el catalogo de discos recomendables desde data/catalogo.json.
+     * Carga el catalogo de discos recomendables de manera estatica y thread-safe.
      *
-     * @return catalogo disponible o lista vacia si el archivo no existe o falla.
+     * @return lista inmutable con el catalogo cargado o vacia si hay fallos.
      */
-    private List<Disco> cargarCatalogo() {
+    private static List<Disco> cargarCatalogoEstatico() {
         File archivo = new File(ARCHIVO_CATALOGO);
         if (!archivo.exists()) {
             LOGGER.warning(() -> "No se encontro " + ARCHIVO_CATALOGO
                     + ". El recomendador no tendra catalogo externo.");
-            return new ArrayList<>();
+            return java.util.Collections.emptyList();
         }
 
         try (Reader reader = new FileReader(archivo)) {
+            Gson gson = new Gson();
             Type tipoLista = new TypeToken<List<Disco>>() {}.getType();
             List<Disco> catalogo = gson.fromJson(reader, tipoLista);
-            return catalogo != null ? catalogo : new ArrayList<>();
+            if (catalogo != null) {
+                LOGGER.info(() -> "Catalogo de recomendaciones cargado en cache: "
+                        + catalogo.size() + " album(es).");
+                return java.util.Collections.unmodifiableList(new ArrayList<>(catalogo));
+            }
+            return java.util.Collections.emptyList();
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "No se pudo cargar el catalogo de recomendaciones.", e);
-            return new ArrayList<>();
+            return java.util.Collections.emptyList();
         }
     }
 
