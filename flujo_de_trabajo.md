@@ -44,8 +44,18 @@ Necesita saber la dirección de red local de la computadora que actuará como se
 
 ### Paso 3: Arrancar el Servidor en la PC 1
 1. Sitúese en la máquina Servidor.
-2. Inicie la aplicación ejecutando la clase [ServidorApp.java](src/main/java/uaemex/ia/proyecto/servidor/ServidorApp.java).
-3. Verá en la consola una confirmación de inicio:
+2. Verifique que la colección base exista en [data/coleccion.json](data/coleccion.json). Esta base se genera con 500 álbumes en español para alimentar las búsquedas y recomendaciones.
+3. Si necesita regenerarla, compile y ejecute el importador:
+   ```bash
+   javac -cp target/classes:lib/gson-2.10.1.jar -d target/classes src/main/java/uaemex/ia/proyecto/herramientas/ImportadorColeccion.java
+   java -cp target/classes:lib/gson-2.10.1.jar uaemex.ia.proyecto.herramientas.ImportadorColeccion
+   ```
+4. Confirme que el archivo contiene 500 registros:
+   ```bash
+   rg -c '"titulo"' data/coleccion.json
+   ```
+5. Inicie la aplicación ejecutando la clase [ServidorApp.java](src/main/java/uaemex/ia/proyecto/servidor/ServidorApp.java).
+6. Verá en la consola una confirmación de inicio:
    ```text
    [Servidor] Iniciando en puerto 5000...
    [Servidor] Listo. Esperando conexiones...
@@ -70,7 +80,34 @@ Necesita saber la dirección de red local de la computadora que actuará como se
 
 ---
 
-## 3. Diagnóstico y Solución de Problemas
+## 3. Base de Datos de 500 Álbumes en Español
+
+La colección persistida en [data/coleccion.json](data/coleccion.json) se genera con [ImportadorColeccion.java](src/main/java/uaemex/ia/proyecto/herramientas/ImportadorColeccion.java). El objetivo es que el servidor tenga una base suficientemente amplia para demostrar búsquedas por título, artista o género, además de recomendaciones menos repetitivas.
+
+La base actual está balanceada así:
+
+*   125 álbumes de `Rock en Espanol`.
+*   125 álbumes de `Pop Latino`.
+*   125 álbumes de `Salsa`.
+*   125 álbumes de `Cumbia`.
+
+El importador intenta leer primero `20110711-update/mbdump/work_alias`, pero ese dump local no contiene títulos de álbum directamente utilizables. Por eso, en la práctica usa el catálogo curado interno. Si se cambia el límite por línea de comandos, la herramienta conserva el orden balanceado por género hasta llegar al número solicitado.
+
+Comandos útiles de verificación:
+
+```bash
+rg -c '"titulo"' data/coleccion.json
+rg -c '"genero": "Rock en Espanol"' data/coleccion.json
+rg -c '"genero": "Pop Latino"' data/coleccion.json
+rg -c '"genero": "Salsa"' data/coleccion.json
+rg -c '"genero": "Cumbia"' data/coleccion.json
+```
+
+Para el estado esperado, estos comandos deben devolver `500`, `125`, `125`, `125` y `125`, respectivamente.
+
+---
+
+## 4. Diagnóstico y Solución de Problemas
 
 Si al intentar conectar el cliente de la PC 2 se muestra un mensaje de error o el estado permanece en **"Sin conexión"**, valide los siguientes puntos:
 

@@ -1,16 +1,3502 @@
 [
   {
-    "titulo": "Abbey Road",
-    "artista": "The Beatles",
-    "anio": 1969,
-    "genero": "Rock",
+    "titulo": "Signos",
+    "artista": "Soda Stereo",
+    "anio": 1986,
+    "genero": "Rock en Espanol",
     "formato": "Vinilo"
   },
   {
-    "titulo": "Thriller",
-    "artista": "Michael Jackson",
+    "titulo": "Dulce Beat",
+    "artista": "Belanova",
+    "anio": 2005,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Salsa Caliente de Nu York",
+    "artista": "Willie Colon",
+    "anio": 1970,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Amor Prohibido",
+    "artista": "Selena",
+    "anio": 1994,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cancion Animal",
+    "artista": "Soda Stereo",
+    "anio": 1990,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cocktail",
+    "artista": "Belanova",
+    "anio": 2003,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Malo",
+    "artista": "Willie Colon",
+    "anio": 1967,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Entre a Mi Mundo",
+    "artista": "Selena",
+    "anio": 1992,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Doble Vida",
+    "artista": "Soda Stereo",
+    "anio": 1988,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Fantasia Pop",
+    "artista": "Belanova",
+    "anio": 2007,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "The Hustler",
+    "artista": "Willie Colon",
+    "anio": 1968,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Ven Conmigo",
+    "artista": "Selena",
+    "anio": 1990,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Nada Personal",
+    "artista": "Soda Stereo",
+    "anio": 1985,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Sueno Electro I",
+    "artista": "Belanova",
+    "anio": 2010,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Guisando",
+    "artista": "Willie Colon",
+    "anio": 1969,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Selena",
+    "artista": "Selena",
+    "anio": 1989,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Soda Stereo",
+    "artista": "Soda Stereo",
+    "anio": 1984,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Sueno Electro II",
+    "artista": "Belanova",
+    "anio": 2011,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cosa Nuestra",
+    "artista": "Willie Colon",
+    "anio": 1969,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Dulce Amor",
+    "artista": "Selena y Los Dinos",
+    "anio": 1988,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Dynamo",
+    "artista": "Soda Stereo",
+    "anio": 1992,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Viaje al Centro del Corazon",
+    "artista": "Belanova",
+    "anio": 2018,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Asalto Navideno",
+    "artista": "Willie Colon",
+    "anio": 1971,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Preciosa",
+    "artista": "Selena y Los Dinos",
+    "anio": 1988,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Suenos Stereo",
+    "artista": "Soda Stereo",
+    "anio": 1995,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Pies Descalzos",
+    "artista": "Shakira",
+    "anio": 1995,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Gran Fuga",
+    "artista": "Willie Colon",
+    "anio": 1971,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Alpha",
+    "artista": "Selena y Los Dinos",
+    "anio": 1986,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Comfort y Musica Para Volar",
+    "artista": "Soda Stereo",
+    "anio": 1996,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Donde Estan los Ladrones?",
+    "artista": "Shakira",
+    "anio": 1998,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Juicio",
+    "artista": "Willie Colon",
+    "anio": 1972,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Mis Primeras Grabaciones",
+    "artista": "Selena",
+    "anio": 1984,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Colores Santos",
+    "artista": "Cerati y Melero",
+    "anio": 1992,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Fijacion Oral Vol. 1",
+    "artista": "Shakira",
+    "anio": 2005,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Lo Mato",
+    "artista": "Willie Colon",
+    "anio": 1973,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "A Go Go",
+    "artista": "Sonora Dinamita",
+    "anio": 1961,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Amor Amarillo",
+    "artista": "Gustavo Cerati",
+    "anio": 1993,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Sale el Sol",
+    "artista": "Shakira",
+    "anio": 2010,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Celia y Willie",
+    "artista": "Celia Cruz y Willie Colon",
+    "anio": 1981,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Ritmo",
+    "artista": "Sonora Dinamita",
+    "anio": 1962,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Bocanada",
+    "artista": "Gustavo Cerati",
+    "anio": 1999,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Dorado",
+    "artista": "Shakira",
+    "anio": 2017,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Siembra",
+    "artista": "Willie Colon y Ruben Blades",
+    "anio": 1978,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Dinamita",
+    "artista": "Sonora Dinamita",
+    "anio": 1963,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Siempre Es Hoy",
+    "artista": "Gustavo Cerati",
+    "anio": 2002,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Las Mujeres Ya No Lloran",
+    "artista": "Shakira",
+    "anio": 2024,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Maestra Vida",
+    "artista": "Ruben Blades",
+    "anio": 1980,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "La Sonora Dinamita",
+    "artista": "Sonora Dinamita",
+    "anio": 1964,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Ahi Vamos",
+    "artista": "Gustavo Cerati",
+    "anio": 2006,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Magia",
+    "artista": "Shakira",
+    "anio": 1991,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Buscando America",
+    "artista": "Ruben Blades y Seis del Solar",
+    "anio": 1984,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cumbias Con La Sonora Dinamita",
+    "artista": "Sonora Dinamita",
+    "anio": 1977,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Fuerza Natural",
+    "artista": "Gustavo Cerati",
+    "anio": 2009,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Peligro",
+    "artista": "Shakira",
+    "anio": 1993,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Escenas",
+    "artista": "Ruben Blades",
+    "anio": 1985,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Meneito",
+    "artista": "Sonora Dinamita",
+    "anio": 1981,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "11 Episodios Sinfonicos",
+    "artista": "Gustavo Cerati",
+    "anio": 2001,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Mi Tierra",
+    "artista": "Gloria Estefan",
+    "anio": 1993,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Agua de Luna",
+    "artista": "Ruben Blades",
+    "anio": 1987,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "La Cumbia Nacio en Baru",
+    "artista": "Sonora Dinamita",
+    "anio": 1984,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Canciones Elegidas 93-04",
+    "artista": "Gustavo Cerati",
+    "anio": 2004,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Abriendo Puertas",
+    "artista": "Gloria Estefan",
+    "anio": 1995,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Antecedente",
+    "artista": "Ruben Blades",
+    "anio": 1988,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "La Cumbia del Sida",
+    "artista": "Sonora Dinamita",
+    "anio": 1988,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "La La La",
+    "artista": "Luis Alberto Spinetta y Fito Paez",
+    "anio": 1986,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Alma Caribena",
+    "artista": "Gloria Estefan",
+    "anio": 2000,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Caminando",
+    "artista": "Ruben Blades",
+    "anio": 1991,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Parabolica",
+    "artista": "Sonora Dinamita",
+    "anio": 1991,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Artaud",
+    "artista": "Pescado Rabioso",
+    "anio": 1973,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "90 Millas",
+    "artista": "Gloria Estefan",
+    "anio": 2007,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Amor y Control",
+    "artista": "Ruben Blades",
+    "anio": 1992,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Las Brujas",
+    "artista": "Sonora Dinamita",
+    "anio": 1992,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Jardin de los Presentes",
+    "artista": "Invisible",
+    "anio": 1976,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Mi Reflejo",
+    "artista": "Christina Aguilera",
+    "anio": 2000,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Rosa de los Vientos",
+    "artista": "Ruben Blades",
+    "anio": 1996,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "30 Pegaditas de Oro",
+    "artista": "Sonora Dinamita",
+    "anio": 1994,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Almendra",
+    "artista": "Almendra",
+    "anio": 1969,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "A Mi Manera",
+    "artista": "Gipsy Kings",
+    "anio": 1987,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Tiempos",
+    "artista": "Ruben Blades",
+    "anio": 1999,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cumbia Universal",
+    "artista": "Sonora Dinamita",
+    "anio": 1996,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Kamikaze",
+    "artista": "Luis Alberto Spinetta",
     "anio": 1982,
-    "genero": "Pop",
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Este Mundo",
+    "artista": "Gipsy Kings",
+    "anio": 1991,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Canciones del Solar de los Aburridos",
+    "artista": "Ruben Blades y Willie Colon",
+    "anio": 1981,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Con Todo",
+    "artista": "Los Angeles Azules",
+    "anio": 1994,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Prive",
+    "artista": "Luis Alberto Spinetta",
+    "anio": 1986,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cosas del Amor",
+    "artista": "Enrique Iglesias",
+    "anio": 1998,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Metiendo Mano!",
+    "artista": "Willie Colon y Ruben Blades",
+    "anio": 1977,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Inolvidables",
+    "artista": "Los Angeles Azules",
+    "anio": 1996,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Tester de Violencia",
+    "artista": "Luis Alberto Spinetta",
+    "anio": 1988,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Vivir",
+    "artista": "Enrique Iglesias",
+    "anio": 1997,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "De Ti Depende",
+    "artista": "Hector Lavoe",
+    "anio": 1976,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Una Lluvia de Rosas",
+    "artista": "Los Angeles Azules",
+    "anio": 1999,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Peluson of Milk",
+    "artista": "Luis Alberto Spinetta",
+    "anio": 1991,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Enrique Iglesias",
+    "artista": "Enrique Iglesias",
+    "anio": 1995,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Voz",
+    "artista": "Hector Lavoe",
+    "anio": 1975,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Alas al Mundo",
+    "artista": "Los Angeles Azules",
+    "anio": 2000,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Para Los Arboles",
+    "artista": "Luis Alberto Spinetta",
+    "anio": 2003,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Quizas",
+    "artista": "Enrique Iglesias",
+    "anio": 2002,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Comedia",
+    "artista": "Hector Lavoe",
+    "anio": 1978,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Nunca Te Olvidare",
+    "artista": "Los Angeles Azules",
+    "anio": 2001,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Pan",
+    "artista": "Luis Alberto Spinetta",
+    "anio": 2005,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Sex and Love",
+    "artista": "Enrique Iglesias",
+    "anio": 2014,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Recordando a Felipe Pirela",
+    "artista": "Hector Lavoe",
+    "anio": 1979,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Juventud Dinamita",
+    "artista": "Los Angeles Azules",
+    "anio": 2002,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Clics Modernos",
+    "artista": "Charly Garcia",
+    "anio": 1983,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Subeme la Radio",
+    "artista": "Enrique Iglesias",
+    "anio": 2017,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Sabio",
+    "artista": "Hector Lavoe",
+    "anio": 1980,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Sin Pecado",
+    "artista": "Los Angeles Azules",
+    "anio": 2004,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Piano Bar",
+    "artista": "Charly Garcia",
+    "anio": 1984,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Vuelve",
+    "artista": "Ricky Martin",
+    "anio": 1998,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Que Sentimiento!",
+    "artista": "Hector Lavoe",
+    "anio": 1981,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Tu Juguete",
+    "artista": "Los Angeles Azules",
+    "anio": 2007,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Yendo de la Cama al Living",
+    "artista": "Charly Garcia",
+    "anio": 1982,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "A Medio Vivir",
+    "artista": "Ricky Martin",
+    "anio": 1995,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Vigilante",
+    "artista": "Willie Colon y Hector Lavoe",
+    "anio": 1983,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "A Ritmo de Cumbia",
+    "artista": "Los Angeles Azules",
+    "anio": 2012,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Parte de la Religion",
+    "artista": "Charly Garcia",
+    "anio": 1987,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Me Amaras",
+    "artista": "Ricky Martin",
+    "anio": 1993,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Revento",
+    "artista": "Hector Lavoe",
+    "anio": 1985,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Como Te Voy a Olvidar",
+    "artista": "Los Angeles Azules",
+    "anio": 2013,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Como Conseguir Chicas",
+    "artista": "Charly Garcia",
+    "anio": 1989,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Ricky Martin",
+    "artista": "Ricky Martin",
+    "anio": 1991,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Strikes Back",
+    "artista": "Hector Lavoe",
+    "anio": 1987,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "De Plaza en Plaza",
+    "artista": "Los Angeles Azules",
+    "anio": 2016,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Filosofia Barata y Zapatos de Goma",
+    "artista": "Charly Garcia",
+    "anio": 1990,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Almas del Silencio",
+    "artista": "Ricky Martin",
+    "anio": 2003,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Celia \u0026 Johnny",
+    "artista": "Celia Cruz y Johnny Pacheco",
+    "anio": 1974,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Esto Si Es Cumbia",
+    "artista": "Los Angeles Azules",
+    "anio": 2018,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Hija de la Lagrima",
+    "artista": "Charly Garcia",
+    "anio": 1994,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Musica + Alma + Sexo",
+    "artista": "Ricky Martin",
+    "anio": 2011,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Tremendo Cache",
+    "artista": "Celia Cruz y Johnny Pacheco",
+    "anio": 1975,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "De Buenos Aires Para el Mundo",
+    "artista": "Los Angeles Azules",
+    "anio": 2020,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Say No More",
+    "artista": "Charly Garcia",
+    "anio": 1996,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "A Quien Quiera Escuchar",
+    "artista": "Ricky Martin",
+    "anio": 2015,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Recordando el Ayer",
+    "artista": "Celia Cruz y Johnny Pacheco",
+    "anio": 1976,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cumbia del Corazon",
+    "artista": "Los Angeles Azules",
+    "anio": 2022,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Vida",
+    "artista": "Sui Generis",
+    "anio": 1972,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "La Copa de la Vida",
+    "artista": "Ricky Martin",
+    "anio": 1998,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Celia Cruz \u0026 Willie Colon",
+    "artista": "Celia Cruz y Willie Colon",
+    "anio": 1977,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Rebeldia",
+    "artista": "Damas Gratis",
+    "anio": 2004,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Confesiones de Invierno",
+    "artista": "Sui Generis",
+    "anio": 1973,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Romance",
+    "artista": "Luis Miguel",
+    "anio": 1991,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Only They Could Have Made This Album",
+    "artista": "Celia Cruz y Willie Colon",
+    "anio": 1977,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Para los Pibes",
+    "artista": "Damas Gratis",
+    "anio": 2000,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Pequenas Anecdotas Sobre las Instituciones",
+    "artista": "Sui Generis",
+    "anio": 1974,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Segundo Romance",
+    "artista": "Luis Miguel",
+    "anio": 1994,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Ceiba",
+    "artista": "Celia Cruz y La Sonora Poncena",
+    "anio": 1979,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Operacion Damas Gratis",
+    "artista": "Damas Gratis",
+    "anio": 2002,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Grasa de las Capitales",
+    "artista": "Seru Giran",
+    "anio": 1979,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Nada Es Igual",
+    "artista": "Luis Miguel",
+    "anio": 1996,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Ritmo en el Corazon",
+    "artista": "Celia Cruz y Ray Barretto",
+    "anio": 1988,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "100% Negro Cumbiero",
+    "artista": "Damas Gratis",
+    "anio": 2006,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Bicicleta",
+    "artista": "Seru Giran",
+    "anio": 1980,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Romances",
+    "artista": "Luis Miguel",
+    "anio": 1997,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Mi Vida Es Cantar",
+    "artista": "Celia Cruz",
+    "anio": 1998,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Sin Remedio",
+    "artista": "Damas Gratis",
+    "anio": 2008,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Peperina",
+    "artista": "Seru Giran",
+    "anio": 1981,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Amarte Es un Placer",
+    "artista": "Luis Miguel",
+    "anio": 1999,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Negra Tiene Tumbao",
+    "artista": "Celia Cruz",
+    "anio": 2001,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Esquivando el Exito",
+    "artista": "Damas Gratis",
+    "anio": 2011,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Seru 92",
+    "artista": "Seru Giran",
+    "anio": 1992,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Mis Romances",
+    "artista": "Luis Miguel",
+    "anio": 2001,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Regalo del Alma",
+    "artista": "Celia Cruz",
+    "anio": 2003,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Vivo en el Luna Park",
+    "artista": "Damas Gratis",
+    "anio": 2012,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Giros",
+    "artista": "Fito Paez",
+    "anio": 1985,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Mexico en la Piel",
+    "artista": "Luis Miguel",
+    "anio": 2004,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Azucar Negra",
+    "artista": "Celia Cruz",
+    "anio": 1993,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Para los Pibes II",
+    "artista": "Damas Gratis",
+    "anio": 2016,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Ciudad de Pobres Corazones",
+    "artista": "Fito Paez",
+    "anio": 1987,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Complices",
+    "artista": "Luis Miguel",
+    "anio": 2008,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Celia Cruz and Friends",
+    "artista": "Celia Cruz",
+    "anio": 1999,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Vivo en el Gran Rex",
+    "artista": "Damas Gratis",
+    "anio": 2018,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Tercer Mundo",
+    "artista": "Fito Paez",
+    "anio": 1990,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Luis Miguel",
+    "artista": "Luis Miguel",
+    "anio": 2010,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Raton",
+    "artista": "Cheo Feliciano",
+    "anio": 1974,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Un Sentimiento",
+    "artista": "Los Palmeras",
+    "anio": 1991,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Amor Despues del Amor",
+    "artista": "Fito Paez",
+    "anio": 1992,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Busca una Mujer",
+    "artista": "Luis Miguel",
+    "anio": 1988,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cheo",
+    "artista": "Cheo Feliciano",
+    "anio": 1971,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Tropibaile Santafesino",
+    "artista": "Los Palmeras",
+    "anio": 1986,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Circo Beat",
+    "artista": "Fito Paez",
+    "anio": 1994,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Aries",
+    "artista": "Luis Miguel",
+    "anio": 1993,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "With a Little Help from My Friend",
+    "artista": "Cheo Feliciano",
+    "anio": 1973,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Por Siempre",
+    "artista": "Los Palmeras",
+    "anio": 1993,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Euforia",
+    "artista": "Fito Paez",
+    "anio": 1996,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "20 Anos",
+    "artista": "Luis Miguel",
+    "anio": 1990,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Estampas",
+    "artista": "Cheo Feliciano",
+    "anio": 1979,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cumbia y Luna",
+    "artista": "Los Palmeras",
+    "anio": 1995,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Abre",
+    "artista": "Fito Paez",
+    "anio": 1999,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Mas",
+    "artista": "Alejandro Sanz",
+    "anio": 1997,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Sentimiento, Tu",
+    "artista": "Cheo Feliciano",
+    "anio": 1980,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Bombon Asesino",
+    "artista": "Los Palmeras",
+    "anio": 2002,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Naturaleza Sangre",
+    "artista": "Fito Paez",
+    "anio": 2003,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Viviendo Deprisa",
+    "artista": "Alejandro Sanz",
+    "anio": 1991,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Profundo",
+    "artista": "Cheo Feliciano",
+    "anio": 1982,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Sean Eternos Los Palmeras",
+    "artista": "Los Palmeras",
+    "anio": 2004,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Rodolfo",
+    "artista": "Fito Paez",
+    "anio": 2007,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Si Tu Me Miras",
+    "artista": "Alejandro Sanz",
+    "anio": 1993,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "25 Aniversario",
+    "artista": "Cheo Feliciano",
+    "anio": 1983,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Saboreando Cumbias",
+    "artista": "Los Palmeras",
+    "anio": 2006,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Confia",
+    "artista": "Fito Paez",
+    "anio": 2010,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "3",
+    "artista": "Alejandro Sanz",
+    "anio": 1995,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Herencia",
+    "artista": "Cheo Feliciano",
+    "anio": 1987,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "40 Anos",
+    "artista": "Los Palmeras",
+    "anio": 2012,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Del 63",
+    "artista": "Fito Paez",
+    "anio": 1984,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Alma al Aire",
+    "artista": "Alejandro Sanz",
+    "anio": 2000,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Indestructible",
+    "artista": "Ray Barretto",
+    "anio": 1973,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Un Poco de Ruido",
+    "artista": "Los Palmeras",
+    "anio": 2020,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Tinta Roja",
+    "artista": "Andres Calamaro",
+    "anio": 2006,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "No Es Lo Mismo",
+    "artista": "Alejandro Sanz",
+    "anio": 2003,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Acid",
+    "artista": "Ray Barretto",
+    "anio": 1968,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Alma de Cumbia",
+    "artista": "Los Palmeras",
+    "anio": 2022,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Alta Suciedad",
+    "artista": "Andres Calamaro",
+    "anio": 1997,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Tren de los Momentos",
+    "artista": "Alejandro Sanz",
+    "anio": 2006,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Together",
+    "artista": "Ray Barretto",
+    "anio": 1969,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Barrio Bravo",
+    "artista": "Celso Pina",
+    "anio": 2001,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Honestidad Brutal",
+    "artista": "Andres Calamaro",
+    "anio": 1999,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Paraiso Express",
+    "artista": "Alejandro Sanz",
+    "anio": 2009,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Barretto Power",
+    "artista": "Ray Barretto",
+    "anio": 1970,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Canto de un Rebelde Para un Rebelde",
+    "artista": "Celso Pina",
+    "anio": 2003,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Salmon",
+    "artista": "Andres Calamaro",
+    "anio": 2000,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Musica No Se Toca",
+    "artista": "Alejandro Sanz",
+    "anio": 2012,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Que Viva la Musica",
+    "artista": "Ray Barretto",
+    "anio": 1972,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Una Vision",
+    "artista": "Celso Pina",
+    "anio": 2003,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Cantante",
+    "artista": "Andres Calamaro",
+    "anio": 2004,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Sirope",
+    "artista": "Alejandro Sanz",
+    "anio": 2015,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Rican/Struction",
+    "artista": "Ray Barretto",
+    "anio": 1979,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Mundo Colombia",
+    "artista": "Celso Pina",
+    "anio": 2002,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Lengua Popular",
+    "artista": "Andres Calamaro",
+    "anio": 2007,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "11 Razones",
+    "artista": "Aitana",
+    "anio": 2020,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Cuna",
+    "artista": "Ray Barretto",
+    "anio": 1981,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cumbia Sobre el Rio",
+    "artista": "Celso Pina",
+    "anio": 2001,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Bohemio",
+    "artista": "Andres Calamaro",
+    "anio": 2013,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Spoiler",
+    "artista": "Aitana",
+    "anio": 2019,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Soy Dichoso",
+    "artista": "Ismael Rivera",
+    "anio": 1974,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Sin Fecha de Caducidad",
+    "artista": "Celso Pina",
+    "anio": 2009,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Nadie Sale Vivo de Aqui",
+    "artista": "Andres Calamaro",
+    "anio": 1989,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Alpha",
+    "artista": "Aitana",
+    "anio": 2023,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Traigo de Todo",
+    "artista": "Ismael Rivera",
+    "anio": 1974,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Aqui Presente Compa",
+    "artista": "Celso Pina",
+    "anio": 2014,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Vasos y Besos",
+    "artista": "Los Abuelos de la Nada",
+    "anio": 1983,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Un Susurro en la Tormenta",
+    "artista": "La Oreja de Van Gogh",
+    "anio": 2020,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Esto Fue Lo Que Trajo el Barco",
+    "artista": "Ismael Rivera",
+    "anio": 1972,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Tierra de Nadie",
+    "artista": "Celso Pina",
+    "anio": 2012,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Himno de Mi Corazon",
+    "artista": "Los Abuelos de la Nada",
+    "anio": 1984,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Dile al Sol",
+    "artista": "La Oreja de Van Gogh",
+    "anio": 1998,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "De Todas Maneras Rosas",
+    "artista": "Ismael Rivera",
+    "anio": 1977,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Rebelde del Acordeon",
+    "artista": "Celso Pina",
+    "anio": 1994,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Los Abuelos de la Nada",
+    "artista": "Los Abuelos de la Nada",
+    "anio": 1982,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Viaje de Copperpot",
+    "artista": "La Oreja de Van Gogh",
+    "anio": 2000,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Feliz Navidad",
+    "artista": "Ismael Rivera",
+    "anio": 1975,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cumbia Amazonica",
+    "artista": "Los Mirlos",
+    "anio": 1972,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "After Chabon",
+    "artista": "Sumo",
+    "anio": 1987,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Lo Que Te Conte Mientras Te Hacias la Dormida",
+    "artista": "La Oreja de Van Gogh",
+    "anio": 2003,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Maelo",
+    "artista": "Ismael Rivera",
+    "anio": 1981,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Poder Verde",
+    "artista": "Los Mirlos",
+    "anio": 1973,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Llegando los Monos",
+    "artista": "Sumo",
+    "anio": 1986,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Guapa",
+    "artista": "La Oreja de Van Gogh",
+    "anio": 2006,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Esto Si Es Lo Mio",
+    "artista": "Ismael Rivera",
+    "anio": 1978,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Los Charapas de Oro",
+    "artista": "Los Mirlos",
+    "anio": 1975,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Divididos por la Felicidad",
+    "artista": "Sumo",
+    "anio": 1985,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "A las Cinco en el Astoria",
+    "artista": "La Oreja de Van Gogh",
+    "anio": 2008,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Sonero Mayor",
+    "artista": "Ismael Rivera",
+    "anio": 1973,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Los Mirlos",
+    "artista": "Los Mirlos",
+    "anio": 1977,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Acariciando lo Aspero",
+    "artista": "Divididos",
+    "anio": 1991,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cometas por el Cielo",
+    "artista": "La Oreja de Van Gogh",
+    "anio": 2011,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Cantante",
+    "artista": "Hector Lavoe",
+    "anio": 1978,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cumbia de los Pajaritos",
+    "artista": "Los Mirlos",
+    "anio": 1978,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "La Era de la Boludez",
+    "artista": "Divididos",
+    "anio": 1993,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Planeta Imaginario",
+    "artista": "La Oreja de Van Gogh",
+    "anio": 2016,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Inconfundible",
+    "artista": "Ismael Rivera",
+    "anio": 1977,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Sonido Amazonico",
+    "artista": "Los Mirlos",
+    "anio": 1980,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Otro Le Travaladna",
+    "artista": "Divididos",
+    "anio": 1995,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Descanso Dominical",
+    "artista": "Mecano",
+    "anio": 1988,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Gran Combo de Puerto Rico",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1963,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Ritmo Caliente",
+    "artista": "Los Mirlos",
+    "anio": 1982,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Narigon del Siglo",
+    "artista": "Divididos",
+    "anio": 2000,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Entre el Cielo y el Suelo",
+    "artista": "Mecano",
+    "anio": 1986,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Acangana",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1963,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Tropicalisimo",
+    "artista": "Los Mirlos",
+    "anio": 1985,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Vengo del Placard de Otro",
+    "artista": "Divididos",
+    "anio": 2002,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Mecano",
+    "artista": "Mecano",
+    "anio": 1982,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Ojos Chinos",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1964,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "La Danza del Petrolero",
+    "artista": "Los Mirlos",
+    "anio": 1991,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Renga",
+    "artista": "La Renga",
+    "anio": 1998,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Donde Esta el Pais de las Hadas?",
+    "artista": "Mecano",
+    "anio": 1983,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Caballo Pelotero",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1965,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Selva",
+    "artista": "Los Mirlos",
+    "anio": 2010,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Despedazado por Mil Partes",
+    "artista": "La Renga",
+    "anio": 1996,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Ya Viene el Sol",
+    "artista": "Mecano",
+    "anio": 1984,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Boogaloo con El Gran Combo",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1967,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Los Destellos",
+    "artista": "Los Destellos",
+    "anio": 1968,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Bailando en Una Pata",
+    "artista": "La Renga",
+    "anio": 1995,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Aidalai",
+    "artista": "Mecano",
+    "anio": 1991,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "De Punta a Punta",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1971,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Constelacion",
+    "artista": "Los Destellos",
+    "anio": 1971,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Esquivando Charcos",
+    "artista": "La Renga",
+    "anio": 1991,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Hombres G",
+    "artista": "Hombres G",
+    "anio": 1985,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Por el Libro",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1972,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "En Orbita",
+    "artista": "Los Destellos",
+    "anio": 1972,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Detonador de Suenos",
+    "artista": "La Renga",
+    "anio": 2003,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Cagaste... Burt Lancaster",
+    "artista": "Hombres G",
+    "anio": 1986,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "En Accion",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1973,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cumbia Peruana",
+    "artista": "Los Destellos",
+    "anio": 1973,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Truenotierra",
+    "artista": "La Renga",
+    "anio": 2006,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Estamos Locos... o Que?",
+    "artista": "Hombres G",
+    "anio": 1987,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "7",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1975,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Ojos Azules",
+    "artista": "Los Destellos",
+    "anio": 1974,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Carajo",
+    "artista": "Carajo",
+    "anio": 2002,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Agitar Antes de Usar",
+    "artista": "Hombres G",
+    "anio": 1988,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Mejor Que Nunca",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1976,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Para Todo el Mundo",
+    "artista": "Los Destellos",
+    "anio": 1975,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Atrapasuenos",
+    "artista": "Carajo",
+    "anio": 2004,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Esta Es Tu Vida",
+    "artista": "Hombres G",
+    "anio": 1990,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Internacional",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1977,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Los Destellos en Accion",
+    "artista": "Los Destellos",
+    "anio": 1976,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Inmundo",
+    "artista": "Carajo",
+    "anio": 2007,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Historia del Bikini",
+    "artista": "Hombres G",
+    "anio": 1992,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Happy Days",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1981,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Los Destellos del Peru",
+    "artista": "Los Destellos",
+    "anio": 1977,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Leon",
+    "artista": "Los Fabulosos Cadillacs",
+    "anio": 1992,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Devuelveme a Mi Chica",
+    "artista": "Hombres G",
+    "anio": 1985,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Nuestro Aniversario",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1982,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "La Nueva Crema",
+    "artista": "Chacalon y la Nueva Crema",
+    "anio": 1981,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Vasos Vacios",
+    "artista": "Los Fabulosos Cadillacs",
+    "anio": 1993,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Un Hombre Solo",
+    "artista": "Julio Iglesias",
+    "anio": 1987,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Y Su Pueblo",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1984,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Soy Provinciano",
+    "artista": "Chacalon y la Nueva Crema",
+    "anio": 1982,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Rey Azucar",
+    "artista": "Los Fabulosos Cadillacs",
+    "anio": 1995,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "De Nina a Mujer",
+    "artista": "Julio Iglesias",
+    "anio": 1981,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Romantico y Sabroso",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1988,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Muchacho Provinciano",
+    "artista": "Chacalon y la Nueva Crema",
+    "anio": 1983,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Fabulosos Calavera",
+    "artista": "Los Fabulosos Cadillacs",
+    "anio": 1997,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "1100 Bel Air Place",
+    "artista": "Julio Iglesias",
+    "anio": 1984,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Latin Up",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1990,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Rey de la Carretera",
+    "artista": "Chacalon y la Nueva Crema",
+    "anio": 1984,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "La Marcha del Golazo Solitario",
+    "artista": "Los Fabulosos Cadillacs",
+    "anio": 1999,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Tango",
+    "artista": "Julio Iglesias",
+    "anio": 1996,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "25th Anniversary",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 1987,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Los Shapis",
+    "artista": "Los Shapis",
+    "anio": 1981,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Yo Te Avise",
+    "artista": "Los Fabulosos Cadillacs",
+    "anio": 1987,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Mexico",
+    "artista": "Julio Iglesias",
+    "anio": 2015,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Sin Salsa No Hay Paraiso",
+    "artista": "El Gran Combo de Puerto Rico",
+    "anio": 2010,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Aguajal",
+    "artista": "Los Shapis",
+    "anio": 1982,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Bares y Fondas",
+    "artista": "Los Fabulosos Cadillacs",
+    "anio": 1986,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Querida",
+    "artista": "Juan Gabriel",
+    "anio": 1984,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Niche",
+    "artista": "Grupo Niche",
+    "anio": 1981,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Los Autenticos",
+    "artista": "Los Shapis",
+    "anio": 1983,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Los Cadillacs Volumen 5",
+    "artista": "Los Fabulosos Cadillacs",
+    "anio": 1990,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Recuerdos II",
+    "artista": "Juan Gabriel",
+    "anio": 1984,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Querer Es Poder",
+    "artista": "Grupo Niche",
+    "anio": 1981,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Corazon Andino",
+    "artista": "Los Shapis",
+    "anio": 1984,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Big Yuyo",
+    "artista": "Los Pericos",
+    "anio": 1992,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Pensamientos",
+    "artista": "Juan Gabriel",
+    "anio": 1986,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Preparate",
+    "artista": "Grupo Niche",
+    "anio": 1982,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Peru Campeon",
+    "artista": "Los Shapis",
+    "anio": 1985,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Ritual",
+    "artista": "Los Pericos",
+    "anio": 1994,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Gracias Por Esperar",
+    "artista": "Juan Gabriel",
+    "anio": 1994,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Directo Desde New York",
+    "artista": "Grupo Niche",
+    "anio": 1983,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cumbias y Porros",
+    "artista": "Lucho Bermudez",
+    "anio": 1950,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Pampas Reggae",
+    "artista": "Los Pericos",
+    "anio": 1994,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Abrazame Muy Fuerte",
+    "artista": "Juan Gabriel",
+    "anio": 2000,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "No Hay Quinto Malo",
+    "artista": "Grupo Niche",
+    "anio": 1984,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Danza Negra",
+    "artista": "Lucho Bermudez",
+    "anio": 1956,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Desde Cero",
+    "artista": "Los Pericos",
+    "anio": 2002,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Inocente de Ti",
+    "artista": "Juan Gabriel",
+    "anio": 2003,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Triunfo",
+    "artista": "Grupo Niche",
+    "anio": 1985,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Colombia Tierra Querida",
+    "artista": "Lucho Bermudez",
+    "anio": 1964,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Pericos and Friends",
+    "artista": "Los Pericos",
+    "anio": 2010,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Los Duo",
+    "artista": "Juan Gabriel",
+    "anio": 2015,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Me Huele a Matrimonio",
+    "artista": "Grupo Niche",
+    "anio": 1986,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Fiesta Colombiana",
+    "artista": "Lucho Bermudez",
+    "anio": 1968,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Silencio",
+    "artista": "Caifanes",
+    "anio": 1992,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Hasta Que Te Conoci",
+    "artista": "Juan Gabriel",
+    "anio": 1986,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Con Cuerdas",
+    "artista": "Grupo Niche",
+    "anio": 1987,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cumbias Colombianas",
+    "artista": "Lucho Bermudez",
+    "anio": 1970,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Caifanes",
+    "artista": "Caifanes",
+    "anio": 1988,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Secretos",
+    "artista": "Jose Jose",
+    "anio": 1983,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Tapando el Hueco",
+    "artista": "Grupo Niche",
+    "anio": 1988,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "La Pollera Colora",
+    "artista": "Wilson Choperena",
+    "anio": 1961,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Diablito",
+    "artista": "Caifanes",
+    "anio": 1990,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Volcan",
+    "artista": "Jose Jose",
+    "anio": 1978,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Sutil y Contundente",
+    "artista": "Grupo Niche",
+    "anio": 1989,
+    "genero": "Salsa",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cumbia Cienaguera",
+    "artista": "Alberto Pacheco",
+    "anio": 1953,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Nervio del Volcan",
+    "artista": "Caifanes",
+    "anio": 1994,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Si Me Dejas Ahora",
+    "artista": "Jose Jose",
+    "anio": 1979,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cielo de Tambores",
+    "artista": "Grupo Niche",
+    "anio": 1990,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Piragua",
+    "artista": "Jose Barros",
+    "anio": 1969,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "La Historia",
+    "artista": "Caifanes",
+    "anio": 1997,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Amor Amor",
+    "artista": "Jose Jose",
+    "anio": 1980,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Llegando al 100%",
+    "artista": "Grupo Niche",
+    "anio": 1991,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Yo Me Llamo Cumbia",
+    "artista": "Mario Garena",
+    "anio": 1970,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Bajo el Azul de Tu Misterio",
+    "artista": "Jaguares",
+    "anio": 1999,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Gracias",
+    "artista": "Jose Jose",
+    "anio": 1981,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Un Alto en el Camino",
+    "artista": "Grupo Niche",
+    "anio": 1993,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cumbia Sampuesana",
+    "artista": "Aniceto Molina",
+    "anio": 1964,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "El Equilibrio de los Jaguares",
+    "artista": "Jaguares",
+    "anio": 1996,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Reflexiones",
+    "artista": "Jose Jose",
+    "anio": 1984,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Huellas del Pasado",
+    "artista": "Grupo Niche",
+    "anio": 1995,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Campanero",
+    "artista": "Aniceto Molina",
+    "anio": 1975,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cuando la Sangre Galopa",
+    "artista": "Jaguares",
+    "anio": 2001,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Promesas",
+    "artista": "Jose Jose",
+    "anio": 1985,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "A Prueba de Fuego",
+    "artista": "Grupo Niche",
+    "anio": 1997,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Cumbia Sampuesana",
+    "artista": "Aniceto Molina",
+    "anio": 1980,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Cronicas de un Laberinto",
+    "artista": "Jaguares",
+    "anio": 2005,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Siempre Contigo",
+    "artista": "Jose Jose",
+    "anio": 1986,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Senales de Humo",
+    "artista": "Grupo Niche",
+    "anio": 1998,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Tigre Sabanero",
+    "artista": "Aniceto Molina",
+    "anio": 1984,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "45",
+    "artista": "Jaguares",
+    "anio": 2008,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Soy Asi",
+    "artista": "Jose Jose",
+    "anio": 1987,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Propuesta",
+    "artista": "Gilberto Santa Rosa",
+    "anio": 1994,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cumbia de Colombia",
+    "artista": "Aniceto Molina",
+    "anio": 1988,
+    "genero": "Cumbia",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Re",
+    "artista": "Cafe Tacvba",
+    "anio": 1994,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Que Es el Amor",
+    "artista": "Jose Jose",
+    "anio": 1989,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Perspectiva",
+    "artista": "Gilberto Santa Rosa",
+    "anio": 1991,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Peluquero",
+    "artista": "Aniceto Molina",
+    "anio": 1994,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cafe Tacuba",
+    "artista": "Cafe Tacvba",
+    "anio": 1992,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Otra Vez",
+    "artista": "Jose Jose",
+    "anio": 1990,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "A Dos Tiempos de un Tiempo",
+    "artista": "Gilberto Santa Rosa",
+    "anio": 1992,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cumbias Para Bailar",
+    "artista": "Aniceto Molina",
+    "anio": 1996,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Avalancha de Exitos",
+    "artista": "Cafe Tacvba",
+    "anio": 1996,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Amiga Mia",
+    "artista": "Yuri",
+    "anio": 1980,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Esencia",
+    "artista": "Gilberto Santa Rosa",
+    "anio": 1996,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "20 Exitos Bailables",
+    "artista": "Aniceto Molina",
+    "anio": 1998,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Reves/Yo Soy",
+    "artista": "Cafe Tacvba",
+    "anio": 1999,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Yo Te Amo Te Amo",
+    "artista": "Yuri",
+    "anio": 1981,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "De Cara al Viento",
+    "artista": "Gilberto Santa Rosa",
+    "anio": 1997,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cumbia Sobre el Mar",
+    "artista": "Quantic y Frente Cumbiero",
+    "anio": 2011,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cuatro Caminos",
+    "artista": "Cafe Tacvba",
+    "anio": 2003,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Llena de Dulzura",
+    "artista": "Yuri",
+    "anio": 1981,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Expresion",
+    "artista": "Gilberto Santa Rosa",
+    "anio": 1999,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Ondatropica",
+    "artista": "Ondatropica",
+    "anio": 2012,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Sino",
+    "artista": "Cafe Tacvba",
+    "anio": 2007,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Isla del Sol",
+    "artista": "Yuri",
+    "anio": 1988,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Romantico",
+    "artista": "Gilberto Santa Rosa",
+    "anio": 2002,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Baile Bucanero",
+    "artista": "Ondatropica",
+    "anio": 2017,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Objeto Antes Llamado Disco",
+    "artista": "Cafe Tacvba",
+    "anio": 2012,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Soy Libre",
+    "artista": "Yuri",
+    "anio": 1991,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Autentico",
+    "artista": "Gilberto Santa Rosa",
+    "anio": 2004,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Frente Cumbiero Meets Mad Professor",
+    "artista": "Frente Cumbiero",
+    "anio": 2010,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Jei Beibi",
+    "artista": "Cafe Tacvba",
+    "anio": 2017,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Nueva Era",
+    "artista": "Yuri",
+    "anio": 1993,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Contraste",
+    "artista": "Gilberto Santa Rosa",
+    "anio": 2007,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Ayo",
+    "artista": "Bomba Estereo",
+    "anio": 2017,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Donde Jugaran los Ninos?",
+    "artista": "Mana",
+    "anio": 1992,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Primera Fila",
+    "artista": "Yuri",
+    "anio": 2017,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Irrepetible",
+    "artista": "Gilberto Santa Rosa",
+    "anio": 2010,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Elegancia Tropical",
+    "artista": "Bomba Estereo",
+    "anio": 2012,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Falta Amor",
+    "artista": "Mana",
+    "anio": 1990,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Mundo de Cristal",
+    "artista": "Thalia",
+    "anio": 1991,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Otra Nota",
+    "artista": "Marc Anthony",
+    "anio": 1993,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Estalla",
+    "artista": "Bomba Estereo",
+    "anio": 2008,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cuando los Angeles Lloran",
+    "artista": "Mana",
+    "anio": 1995,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Love",
+    "artista": "Thalia",
+    "anio": 1992,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Todo a Su Tiempo",
+    "artista": "Marc Anthony",
+    "anio": 1995,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Amanecer",
+    "artista": "Bomba Estereo",
+    "anio": 2015,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Suenos Liquidos",
+    "artista": "Mana",
+    "anio": 1997,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "En Extasis",
+    "artista": "Thalia",
+    "anio": 1995,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Contra la Corriente",
+    "artista": "Marc Anthony",
+    "anio": 1997,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Deja",
+    "artista": "Bomba Estereo",
+    "anio": 2021,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Revolucion de Amor",
+    "artista": "Mana",
+    "anio": 2002,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Amor a la Mexicana",
+    "artista": "Thalia",
+    "anio": 1997,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Libre",
+    "artista": "Marc Anthony",
+    "anio": 2001,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cumbias Villera",
+    "artista": "Yerba Brava",
+    "anio": 1999,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Amar Es Combatir",
+    "artista": "Mana",
+    "anio": 2006,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Arrasando",
+    "artista": "Thalia",
+    "anio": 2000,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Valio la Pena",
+    "artista": "Marc Anthony",
+    "anio": 2004,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Los Duenos del Pabellon",
+    "artista": "Yerba Brava",
+    "anio": 2000,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Drama y Luz",
+    "artista": "Mana",
+    "anio": 2011,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Thalia",
+    "artista": "Thalia",
+    "anio": 2002,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Cantante",
+    "artista": "Marc Anthony",
+    "anio": 2007,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "100% Villera",
+    "artista": "Yerba Brava",
+    "anio": 2001,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cama Incendiada",
+    "artista": "Mana",
+    "anio": 2015,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Sexto Sentido",
+    "artista": "Thalia",
+    "anio": 2005,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Iconos",
+    "artista": "Marc Anthony",
+    "anio": 2010,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "De Culo",
+    "artista": "Yerba Brava",
+    "anio": 2002,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Senderos de Traicion",
+    "artista": "Heroes del Silencio",
+    "anio": 1990,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Primera Fila",
+    "artista": "Thalia",
+    "anio": 2009,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "3.0",
+    "artista": "Marc Anthony",
+    "anio": 2013,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Hasta las Manos",
+    "artista": "Yerba Brava",
+    "anio": 2004,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Mar No Cesa",
+    "artista": "Heroes del Silencio",
+    "anio": 1988,
+    "genero": "Rock en Espanol",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Desamorfosis",
+    "artista": "Thalia",
+    "anio": 2021,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Opus",
+    "artista": "Marc Anthony",
+    "anio": 2019,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Flor de Piedra",
+    "artista": "Flor de Piedra",
+    "anio": 1999,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "El Espiritu del Vino",
+    "artista": "Heroes del Silencio",
+    "anio": 1993,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Tierra de Nadie",
+    "artista": "Ana Gabriel",
+    "anio": 1988,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Pa\u0027lla Voy",
+    "artista": "Marc Anthony",
+    "anio": 2022,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "La Vanda Mas Loca",
+    "artista": "Flor de Piedra",
+    "anio": 2000,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Avalancha",
+    "artista": "Heroes del Silencio",
+    "anio": 1995,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Quien Como Tu",
+    "artista": "Ana Gabriel",
+    "anio": 1989,
+    "genero": "Pop Latino",
+    "formato": "Vinilo"
+  },
+  {
+    "titulo": "Justo a Tiempo",
+    "artista": "Victor Manuelle",
+    "anio": 1993,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Cumbia Cabeza",
+    "artista": "Flor de Piedra",
+    "anio": 2001,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Parasiempre",
+    "artista": "Heroes del Silencio",
+    "anio": 1996,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Mi Mexico",
+    "artista": "Ana Gabriel",
+    "anio": 1991,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Solo Contigo",
+    "artista": "Victor Manuelle",
+    "anio": 1994,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Alta Fiesta",
+    "artista": "Flor de Piedra",
+    "anio": 2002,
+    "genero": "Cumbia",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Pequeno",
+    "artista": "Enrique Bunbury",
+    "anio": 1999,
+    "genero": "Rock en Espanol",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Luna",
+    "artista": "Ana Gabriel",
+    "anio": 1993,
+    "genero": "Pop Latino",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Victor Manuelle",
+    "artista": "Victor Manuelle",
+    "anio": 1996,
+    "genero": "Salsa",
+    "formato": "CD"
+  },
+  {
+    "titulo": "Nestor en Bloque",
+    "artista": "Nestor en Bloque",
+    "anio": 2003,
+    "genero": "Cumbia",
     "formato": "CD"
   }
 ]

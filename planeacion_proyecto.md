@@ -149,6 +149,7 @@ Para evitar construir toda la lógica de golpe, se propone un enfoque incrementa
     1.  Desarrollar el `AgenteAnalizador`: cada vez que se registre un disco, recalcula el perfil de gustos (porcentajes de géneros favoritos).
     2.  Desarrollar el `AgenteBuscador`: buscar discos utilizando coincidencia aproximada (algoritmo Levenshtein o coincidencia difusa) para tolerar errores ortográficos en la consulta.
     3.  Añadir el motor de búsqueda en la interfaz del cliente.
+    4.  Poblar `data/coleccion.json` con una base amplia de prueba usando `ImportadorColeccion`.
 
 ### Etapa 5: Implementación del Agente 3 (Recomendador)
 *   **Objetivo:** Culminar la lógica de IA con el motor de recomendaciones personalizado.
@@ -166,15 +167,48 @@ Para evitar construir toda la lógica de golpe, se propone un enfoque incrementa
 
 ---
 
-## 6. Observaciones y Mejoras a Considerar
+## 6. Base de Datos Musical para Búsqueda y Recomendación
 
-### 6.1 Paquete `compartido` en proyectos separados
+El servidor persiste la colección en [data/coleccion.json](data/coleccion.json). Para que el sistema de búsqueda y los agentes de recomendación tengan suficiente material de prueba, se agregó la herramienta [ImportadorColeccion.java](src/main/java/uaemex/ia/proyecto/herramientas/ImportadorColeccion.java).
+
+La base generada actualmente contiene **500 álbumes icónicos en español**, balanceados para cubrir cuatro familias musicales usadas por el proyecto:
+
+*   **125 álbumes de Rock en Español.**
+*   **125 álbumes de Pop Latino.**
+*   **125 álbumes de Salsa.**
+*   **125 álbumes de Cumbia.**
+
+Cada registro se serializa con la estructura compartida `Disco`: `titulo`, `artista`, `anio`, `genero` y `formato`. El importador asigna `Vinilo` a discos anteriores a 1990 y `CD` a discos de 1990 en adelante, lo que mantiene coherencia histórica sin requerir capturar manualmente el formato para cada una de las 500 entradas.
+
+### 6.1 Flujo del importador
+
+`ImportadorColeccion` conserva soporte para leer títulos desde un TSV externo, por defecto `20110711-update/mbdump/work_alias`. Sin embargo, el archivo local de MusicBrainz contiene principalmente IDs, fechas y códigos de idioma, no títulos de álbum completos. Cuando no se detectan títulos textuales útiles, la herramienta usa el catálogo curado interno.
+
+El catálogo interno se mantiene como líneas TSV dentro del código para que sea fácil auditar y ampliar entradas:
+
+```text
+titulo<TAB>artista<TAB>anio<TAB>genero
+```
+
+Al escribir `data/coleccion.json`, el importador intercala los géneros para evitar que los primeros registros pertenezcan a una sola categoría. Con el límite por defecto de `500`, el resultado queda balanceado en partes iguales.
+
+### 6.2 Impacto en los agentes
+
+*   **Agente Buscador:** dispone de suficientes títulos, artistas y géneros para validar búsquedas exactas y aproximadas.
+*   **Agente Analizador:** puede construir perfiles de gustos con distribución más representativa.
+*   **Agente Recomendador:** tiene una colección persistida más rica para producir sugerencias y evitar resultados repetitivos.
+
+---
+
+## 7. Observaciones y Mejoras a Considerar
+
+### 7.1 Paquete `compartido` en proyectos separados
 Si el cliente y el servidor se estructuran como proyectos Maven/Gradle independientes, el paquete `compartido` (que contiene `MensajeSocket.java` y otras clases reutilizables) debe empaquetarse como un módulo o JAR independiente e incluirse como dependencia en ambos proyectos. Esto evita duplicar clases y mantiene la consistencia del protocolo.
 
-### 6.2 Agente 3 sin acceso directo a la BD
+### 7.2 Agente 3 sin acceso directo a la BD
 En el diagrama de arquitectura, el `AgenteRecomendador` solo se comunica con el Agente 1 y el Agente 2, sin acceso directo a la BD. Esto es correcto si únicamente consume perfiles ya calculados, pero si en un futuro se requiere guardar historial de recomendaciones o métricas de uso, se deberá añadir una conexión directa del Agente 3 a la capa de persistencia.
 
-### 6.3 Protocolo de respuesta del servidor (estructura JSON)
+### 7.3 Protocolo de respuesta del servidor (estructura JSON)
 El protocolo actual solo define la estructura de las **peticiones** del cliente. Se debe definir también la estructura de las **respuestas** del servidor para cubrir casos de éxito y error. Ejemplo propuesto:
 
 ```json
@@ -186,7 +220,7 @@ El protocolo actual solo define la estructura de las **peticiones** del cliente.
 }
 ```
 
-### 6.4 Manejo de concurrencia en el servidor
+### 7.4 Manejo de concurrencia en el servidor
 El `ServerController` debe ser capaz de atender múltiples clientes simultáneamente. Se recomienda usar un `ExecutorService` (pool de hilos) para asignar un hilo por conexión entrante, evitando que una solicitud bloquee a las demás. Esta tarea debería incluirse en la **Etapa 1** o **Etapa 2** del roadmap.
 
 ```java
