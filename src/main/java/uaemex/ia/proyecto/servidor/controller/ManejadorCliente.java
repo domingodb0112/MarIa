@@ -90,6 +90,8 @@ public class ManejadorCliente implements Runnable {
             case "LISTAR_DISCOS":           return acciones.listarDiscos(mensaje);
             case "BUSCAR_ALBUM":            return acciones.buscarAlbum(mensaje);
             case "OBTENER_RECOMENDACIONES": return acciones.obtenerRecomendaciones(mensaje);
+            case "ACEPTAR_RECOMENDACION":   return acciones.registrarFeedbackRecomendacion(mensaje, true);
+            case "RECHAZAR_RECOMENDACION":  return acciones.registrarFeedbackRecomendacion(mensaje, false);
             default:
                 return RespuestaSocket.error(mensaje.getTransaccionId(),
                         "Accion no reconocida: " + mensaje.getAccion());

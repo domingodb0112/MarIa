@@ -60,7 +60,7 @@ public class PanelFormulario extends JPanel {
 
         btnRegistrar = new JButton("Registrar Disco");
         btnListar = new JButton("Listar Coleccion");
-        btnReconectar = new JButton("Reconectar al Servidor");
+        btnReconectar = new JButton("Reconectar a MarIA");
 
         UIStyles.estilizarBotonPrimario(btnRegistrar);
         UIStyles.estilizarBotonSecundario(btnListar);

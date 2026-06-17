@@ -92,6 +92,26 @@ class AccionesCliente {
     }
 
     /**
+     * Aprende de la aceptacion o rechazo de una recomendacion enviada al cliente.
+     *
+     * @param mensaje solicitud con el disco evaluado.
+     * @param aceptada true si la recomendacion fue aceptada por el usuario.
+     * @return respuesta que confirma el ajuste del estado aprendido.
+     */
+    RespuestaSocket registrarFeedbackRecomendacion(MensajeSocket mensaje, boolean aceptada) {
+        Disco disco = mensaje.getDatos();
+        if (disco == null) {
+            return RespuestaSocket.error(mensaje.getTransaccionId(),
+                    "Se requiere el disco recomendado para registrar retroalimentacion.");
+        }
+
+        recomendador.registrarRetroalimentacion(disco, aceptada);
+        String resultado = aceptada ? "aceptada" : "rechazada";
+        return RespuestaSocket.ok(mensaje.getTransaccionId(),
+                "Retroalimentacion registrada: recomendacion " + resultado + ".", disco);
+    }
+
+    /**
      * Extrae la primera consulta disponible del disco usado como filtro.
      *
      * @param disco datos enviados por el cliente para buscar.

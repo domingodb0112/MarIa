@@ -100,7 +100,25 @@ public class ClientPresenter {
      */
     public void obtenerRecomendaciones() {
         enviar("OBTENER_RECOMENDACIONES", null,
-                r -> mostrarLista("Recomendaciones", r), "Fallo al obtener recomendaciones");
+                this::mostrarRecomendaciones, "Fallo al obtener recomendaciones");
+    }
+
+    /**
+     * Informa al servidor que el usuario acepto una recomendacion.
+     *
+     * @param disco disco recomendado seleccionado.
+     */
+    public void aceptarRecomendacion(Disco disco) {
+        enviar("ACEPTAR_RECOMENDACION", disco, this::mostrarFeedback, "Fallo al enviar retroalimentacion");
+    }
+
+    /**
+     * Informa al servidor que el usuario rechazo una recomendacion.
+     *
+     * @param disco disco recomendado seleccionado.
+     */
+    public void rechazarRecomendacion(Disco disco) {
+        enviar("RECHAZAR_RECOMENDACION", disco, this::mostrarFeedback, "Fallo al enviar retroalimentacion");
     }
 
     /**
@@ -155,12 +173,37 @@ public class ClientPresenter {
     }
 
     /**
+     * Muestra recomendaciones y las deja disponibles para aceptar o rechazar.
+     *
+     * @param r respuesta del servidor.
+     */
+    private void mostrarRecomendaciones(RespuestaSocket r) {
+        mostrarLista("Recomendaciones", r);
+        if ("OK".equals(r.getStatus())) {
+            vista.actualizarRecomendaciones(r.getListaDiscos());
+        }
+    }
+
+    /**
+     * Reporta que el aprendizaje del recomendador recibio retroalimentacion.
+     *
+     * @param r respuesta del servidor.
+     */
+    private void mostrarFeedback(RespuestaSocket r) {
+        if (!"OK".equals(r.getStatus())) {
+            vista.log("[ERROR] " + r.getMensaje());
+            return;
+        }
+        vista.log("[MarIA Aprendizaje] " + r.getMensaje() + " -> " + r.getDatos());
+    }
+
+    /**
      * Actualiza la interfaz despues de una conexion exitosa.
      */
     private void conexionExitosa() {
         vista.marcarConectado(host, puerto);
         vista.setBotonera(true);
-        vista.log("Conexion establecida con el servidor.");
+        vista.log("[MarIA] Conexion establecida.");
     }
 
     /**
@@ -170,10 +213,10 @@ public class ClientPresenter {
      */
     private void conexionFallida(Exception ex) {
         vista.marcarDesconectado();
-        vista.log("[ERROR] No se pudo conectar a " + host + ":" + puerto
+        vista.log("[MarIA ERROR] No se pudo conectar a " + host + ":" + puerto
                 + " - " + ErrorMessages.rootMessage(ex));
-        vista.mostrarDialogoRed("No se pudo conectar con el servidor.\n\n"
-                + "Verifica la IP, el puerto y que el servidor este iniciado.");
+        vista.mostrarDialogoRed("No se pudo conectar con MarIA.\n\n"
+                + "Verifica la IP, el puerto y que el servicio este iniciado.");
     }
 
     /**
@@ -184,9 +227,9 @@ public class ClientPresenter {
      */
     private void manejarFalloRed(String contexto, Exception ex) {
         vista.marcarDesconectado();
-        vista.log("[ERROR] " + contexto + ": " + ErrorMessages.rootMessage(ex));
+        vista.log("[MarIA ERROR] " + contexto + ": " + ErrorMessages.rootMessage(ex));
         vista.mostrarDialogoRed(contexto + ".\n\n"
-                + "La conexion con el servidor se perdio o expiro.\n"
-                + "Revisa la red y presiona 'Reconectar al Servidor'.");
+                + "La conexion con MarIA se perdio o expiro.\n"
+                + "Revisa la red y presiona 'Reconectar a MarIA'.");
     }
 }

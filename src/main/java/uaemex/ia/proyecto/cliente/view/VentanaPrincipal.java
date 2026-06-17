@@ -28,7 +28,7 @@ public class VentanaPrincipal extends JFrame {
      * @param puerto puerto TCP del servidor configurado.
      */
     public VentanaPrincipal(String host, int puerto) {
-        super("Sistema de Recomendacion de Musica Fisica — UAEMEX IA");
+        super("MarIA - Sistema de Recomendacion Musical");
         UIStyles.setupLookAndFeel();
         this.presenter = new ClientPresenter(this, host, puerto);
         initUI();
@@ -51,7 +51,8 @@ public class VentanaPrincipal extends JFrame {
 
         raiz.add(crearPanelTitulo(), BorderLayout.NORTH);
 
-        panelConsultas = new PanelConsultas(presenter::buscarAlbum, presenter::obtenerRecomendaciones);
+        panelConsultas = new PanelConsultas(presenter::buscarAlbum, presenter::obtenerRecomendaciones,
+                presenter::aceptarRecomendacion, presenter::rechazarRecomendacion);
         panelFormulario = new PanelFormulario(presenter::registrarDisco, presenter::listarColeccion, presenter::conectar, panelConsultas);
         raiz.add(panelFormulario, BorderLayout.WEST);
 
@@ -69,7 +70,7 @@ public class VentanaPrincipal extends JFrame {
     private JPanel crearPanelTitulo() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setOpaque(false);
-        JLabel label = new JLabel("Coleccion de Musica Fisica");
+        JLabel label = new JLabel("MarIA");
         label.setFont(UIStyles.FUENTE_TITULO);
         label.setForeground(UIStyles.COLOR_PRIMARIO);
         panel.add(label);
@@ -92,7 +93,7 @@ public class VentanaPrincipal extends JFrame {
         areaLog.setWrapStyleWord(true);
         JScrollPane scroll = new JScrollPane(areaLog);
         scroll.getViewport().setBackground(areaLog.getBackground());
-        scroll.setBorder(UIStyles.crearBordeTitulo("Respuestas del Servidor"));
+        scroll.setBorder(UIStyles.crearBordeTitulo("Logs de MarIA"));
         return scroll;
     }
 
@@ -133,6 +134,15 @@ public class VentanaPrincipal extends JFrame {
     }
 
     /**
+     * Muestra las recomendaciones recientes en el selector de retroalimentacion.
+     *
+     * @param recomendaciones lista recibida desde el servidor.
+     */
+    public void actualizarRecomendaciones(java.util.List<Disco> recomendaciones) {
+        panelConsultas.actualizarRecomendaciones(recomendaciones);
+    }
+
+    /**
      * Refleja en la barra de estado que el servidor esta disponible.
      *
      * @param host host conectado.
@@ -157,7 +167,7 @@ public class VentanaPrincipal extends JFrame {
      * @param mensaje detalle que se mostrara al usuario.
      */
     public void mostrarDialogoRed(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Conexion con el servidor",
+        JOptionPane.showMessageDialog(this, mensaje, "Conexion con MarIA",
                 JOptionPane.WARNING_MESSAGE);
     }
 }

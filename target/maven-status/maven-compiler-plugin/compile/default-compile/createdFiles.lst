@@ -9,7 +9,10 @@ uaemex/ia/proyecto/servidor/controller/AccionesCliente.class
 uaemex/ia/proyecto/servidor/model/agentes/AgenteRecomendador.class
 uaemex/ia/proyecto/cliente/controller/ClientController.class
 uaemex/ia/proyecto/cliente/view/UIStyles.class
+uaemex/ia/proyecto/herramientas/ImportadorColeccion.class
+uaemex/ia/proyecto/servidor/model/agentes/AgenteRecomendador$2.class
 uaemex/ia/proyecto/cliente/view/VentanaPrincipal.class
+uaemex/ia/proyecto/herramientas/ImportadorColeccion$Opciones.class
 uaemex/ia/proyecto/servidor/model/agentes/ResultadoBusqueda.class
 uaemex/ia/proyecto/servidor/model/agentes/AgenteBuscador.class
 uaemex/ia/proyecto/cliente/view/PanelEstado.class

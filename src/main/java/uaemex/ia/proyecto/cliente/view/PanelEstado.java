@@ -18,8 +18,8 @@ public class PanelEstado extends JPanel {
         setOpaque(false);
         setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIStyles.COLOR_BORDE));
 
-        add(UIStyles.crearEtiqueta("Estado:"));
-        lblEstado = new JLabel("Desconectado");
+        add(UIStyles.crearEtiqueta("MarIA:"));
+        lblEstado = new JLabel("Desconectada");
         lblEstado.setFont(UIStyles.FUENTE_BASE);
         lblEstado.setForeground(UIStyles.COLOR_TEXTO);
         add(lblEstado);
@@ -33,7 +33,7 @@ public class PanelEstado extends JPanel {
      */
     public void marcarConectado(String host, int puerto) {
         lblEstado.setForeground(new Color(24, 128, 72));
-        lblEstado.setText("Conectado a " + host + ":" + puerto);
+        lblEstado.setText("Conectada a " + host + ":" + puerto);
     }
 
     /**
@@ -41,6 +41,6 @@ public class PanelEstado extends JPanel {
      */
     public void marcarDesconectado() {
         lblEstado.setForeground(new Color(184, 63, 63));
-        lblEstado.setText("Sin conexion - use Reconectar al Servidor");
+        lblEstado.setText("Sin conexion - use Reconectar a MarIA");
     }
 }
