@@ -6,7 +6,7 @@ Este proyecto conecta dos computadoras independientes (o procesos locales) media
 
 ---
 
-## Resumen del Trabajo Realizado
+## Trabajo Realizado
 
 Hemos llevado el sistema base a un estándar de producción robusto, agregando tolerancia a fallos, inteligencia avanzada y una interfaz enriquecida, todo bajo la restricción estricta de que **ningún archivo fuente `.java` supere las 150 líneas de código** para garantizar modularidad y mantenibilidad.
 
