@@ -4,6 +4,7 @@ import uaemex.ia.proyecto.cliente.controller.ClientController;
 import uaemex.ia.proyecto.compartido.Disco;
 import uaemex.ia.proyecto.compartido.MensajeSocket;
 import uaemex.ia.proyecto.compartido.RespuestaSocket;
+import uaemex.ia.proyecto.compartido.TlsConfig;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -15,13 +16,21 @@ public class ClientPresenter {
     private final VentanaPrincipal vista;
     private final String host;
     private final int puerto;
+    private final String userId;
+    private final TlsConfig tlsConfig;
     private ClientController controller;
 
     public ClientPresenter(VentanaPrincipal vista, String host, int puerto) {
+        this(vista, host, puerto, "default-user", null);
+    }
+
+    public ClientPresenter(VentanaPrincipal vista, String host, int puerto, String userId, TlsConfig tlsConfig) {
         this.vista = vista;
         this.host = host;
         this.puerto = puerto;
-        this.controller = new ClientController(host, puerto);
+        this.userId = userId == null || userId.trim().isEmpty() ? "default-user" : userId.trim();
+        this.tlsConfig = tlsConfig;
+        this.controller = new ClientController(host, puerto, tlsConfig);
     }
 
     public boolean estaConectado() { return controller != null && controller.estaConectado(); }
@@ -35,7 +44,7 @@ public class ClientPresenter {
         vista.setBotonera(false);
         vista.setReconectarEnabled(false);
         desconectar();
-        controller = new ClientController(host, puerto);
+        controller = new ClientController(host, puerto, tlsConfig);
         // Evita colgar el EDT al realizar la conexión de red
         AsyncTaskRunner.run(() -> { controller.conectar(); return null; },
             ok -> conexionExitosa(), this::conexionFallida, () -> vista.setReconectarEnabled(true));
@@ -76,7 +85,7 @@ public class ClientPresenter {
     // Envía la trama en un hilo asíncrono y bloquea la botonera temporalmente
     private void enviar(String accion, Disco datos, Consumer<RespuestaSocket> onSuccess, String error) {
         vista.setBotonera(false);
-        AsyncTaskRunner.run(() -> controller.enviarMensaje(new MensajeSocket(accion, datos)),
+        AsyncTaskRunner.run(() -> controller.enviarMensaje(new MensajeSocket(accion, datos, userId)),
                 onSuccess, ex -> manejarFalloRed(error, ex), () -> vista.setBotonera(estaConectado()));
     }
 

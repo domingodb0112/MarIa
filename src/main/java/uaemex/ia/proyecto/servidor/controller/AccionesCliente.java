@@ -32,21 +32,25 @@ class AccionesCliente {
         if (!error.isEmpty()) return RespuestaSocket.error(mensaje.getTransaccionId(), error);
         
         // Verifica duplicados antes de guardar
-        if (existeDisco(disco)) {
+        if (existeDisco(mensaje.getUserId(), disco)) {
             return RespuestaSocket.ok(mensaje.getTransaccionId(), "El disco ya existia en la coleccion.", disco);
         }
         
         // Guarda en BD y recalcula el perfil de gustos del usuario
-        Database.getInstance().guardar(disco);
-        PerfilGustos perfil = analizador.calcularPerfil(Database.getInstance().obtenerTodos());
+        Database.getInstance().guardar(mensaje.getUserId(), disco);
+        PerfilGustos perfil = analizador.calcularPerfil(coleccion(mensaje));
         LOGGER.info(() -> "Perfil recalculado: " + perfil);
         return RespuestaSocket.ok(mensaje.getTransaccionId(), "Disco registrado y guardado correctamente.", disco);
     }
 
     // Retorna todos los discos registrados en la base de datos
     RespuestaSocket listarDiscos(MensajeSocket mensaje) {
-        List<Disco> lista = Database.getInstance().obtenerTodos();
-        return RespuestaSocket.okLista(mensaje.getTransaccionId(), lista.size() + " disco(s) en la coleccion.", lista);
+        int total = Database.getInstance().contar(mensaje.getUserId());
+        List<Disco> lista = Database.getInstance().obtenerPagina(
+                mensaje.getUserId(), mensaje.getPagina(), mensaje.getTamanoPagina());
+        return RespuestaSocket.okLista(mensaje.getTransaccionId(),
+                total + " disco(s) en la coleccion.", lista)
+                .conPagina(mensaje.getPagina(), mensaje.getTamanoPagina(), total);
     }
 
     // Realiza búsquedas aproximadas a través del Agente Buscador
@@ -55,7 +59,7 @@ class AccionesCliente {
         if (consulta.isEmpty()) {
             return RespuestaSocket.error(mensaje.getTransaccionId(), "Se requiere titulo, artista o genero.");
         }
-        List<Disco> resultados = buscador.buscar(consulta, Database.getInstance().obtenerTodos());
+        List<Disco> resultados = buscador.buscar(consulta, coleccion(mensaje));
         String texto = resultados.isEmpty() ? "No se encontraron discos para: " + consulta
                 : resultados.size() + " resultado(s) encontrado(s) para: " + consulta;
         return RespuestaSocket.okLista(mensaje.getTransaccionId(), texto, resultados);
@@ -67,9 +71,9 @@ class AccionesCliente {
     }
 
     private RespuestaSocket obtenerRecomendacionesInterno(MensajeSocket mensaje) {
-        List<Disco> coleccion = Database.getInstance().obtenerTodos();
+        List<Disco> coleccion = coleccion(mensaje);
         PerfilGustos perfil = analizador.calcularPerfil(coleccion);
-        List<Disco> recomendaciones = recomendador.recomendar(perfil, coleccion);
+        List<Disco> recomendaciones = recomendador.recomendar(mensaje.getUserId(), perfil, coleccion);
         String texto = recomendaciones.isEmpty() ? "No hay recomendaciones nuevas disponibles."
                 : recomendaciones.size() + " recomendacion(es) generada(s) segun tu perfil: " + perfil.getGeneroFavorito();
         return RespuestaSocket.okLista(mensaje.getTransaccionId(), texto, recomendaciones);
@@ -85,16 +89,20 @@ class AccionesCliente {
         if (disco == null) {
             return RespuestaSocket.error(mensaje.getTransaccionId(), "Se requiere el disco para registrar feedback.");
         }
-        recomendador.registrarRetroalimentacion(disco, aceptada);
+        recomendador.registrarRetroalimentacion(mensaje.getUserId(), disco, aceptada);
         String resultado = aceptada ? "aceptada" : "rechazada";
         return RespuestaSocket.ok(mensaje.getTransaccionId(), "Retroalimentacion registrada: recomendacion " + resultado + ".", disco);
     }
 
     // Revisa duplicados comparando claves normalizadas de título/artista
-    private boolean existeDisco(Disco disco) {
+    private boolean existeDisco(String userId, Disco disco) {
         String clave = DiscoKeys.clave(disco);
-        return Database.getInstance().obtenerTodos().stream()
+        return Database.getInstance().obtenerTodos(userId).stream()
                 .anyMatch(actual -> DiscoKeys.clave(actual).equals(clave));
+    }
+
+    private List<Disco> coleccion(MensajeSocket mensaje) {
+        return Database.getInstance().obtenerTodos(mensaje.getUserId());
     }
 
     // Extrae el primer campo no vacío del filtro de búsqueda

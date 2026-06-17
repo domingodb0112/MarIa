@@ -7,7 +7,7 @@ import uaemex.ia.proyecto.servidor.model.agentes.SimilarityUtils;
  * Utilidad para generar claves uniformes comparables para la identificación única
  * de discos físicos en el servidor.
  */
-final class DiscoKeys {
+public final class DiscoKeys {
     private DiscoKeys() {
     }
 
@@ -17,7 +17,7 @@ final class DiscoKeys {
      * @param disco el objeto Disco a indexar/identificar.
      * @return la clave unificada en formato "titulo|artista".
      */
-    static String clave(Disco disco) {
+    public static String clave(Disco disco) {
         return SimilarityUtils.normalizar(disco.getTitulo()) + "|"
                 + SimilarityUtils.normalizar(disco.getArtista());
     }

@@ -1,6 +1,7 @@
 package uaemex.ia.proyecto.cliente;
 
 import uaemex.ia.proyecto.cliente.view.VentanaPrincipal;
+import uaemex.ia.proyecto.compartido.TlsConfig;
 
 import javax.swing.SwingUtilities;
 import java.io.FileInputStream;
@@ -29,10 +30,12 @@ public class ClienteApp {
         Properties config = cargarConfiguracion();
         String host = config.getProperty("server.ip", DEFAULT_HOST).trim();
         int puerto = leerPuerto(config.getProperty("server.port"));
+        String userId = config.getProperty("client.user.id", "default-user").trim();
+        TlsConfig tlsConfig = new TlsConfig(config);
 
         // Swing requiere crear y manipular componentes dentro del Event Dispatch Thread.
         SwingUtilities.invokeLater(() -> {
-            VentanaPrincipal ventana = new VentanaPrincipal(host, puerto);
+            VentanaPrincipal ventana = new VentanaPrincipal(host, puerto, userId, tlsConfig);
             ventana.setVisible(true);
         });
     }

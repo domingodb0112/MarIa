@@ -12,6 +12,10 @@ public class RespuestaSocket {
     private String mensaje;
     private Disco datos;          // null cuando la respuesta no lleva un disco individual
     private List<Disco> listaDiscos; // usado por LISTAR_DISCOS
+    private String userId;
+    private int pagina;
+    private int tamanoPagina;
+    private int total;
 
     /**
      * Constructor vacio requerido por Gson para reconstruir respuestas desde JSON.
@@ -49,6 +53,7 @@ public class RespuestaSocket {
         r.status = "OK";
         r.mensaje = mensaje;
         r.listaDiscos = lista;
+        r.total = lista == null ? 0 : lista.size();
         return r;
     }
 
@@ -77,6 +82,22 @@ public class RespuestaSocket {
     public Disco getDatos()             { return datos; }
     /** @return lista de discos para operaciones de consulta. */
     public List<Disco> getListaDiscos() { return listaDiscos; }
+    public String getUserId()            { return userId; }
+    public int getPagina()               { return pagina; }
+    public int getTamanoPagina()         { return tamanoPagina; }
+    public int getTotal()                { return total; }
+
+    public RespuestaSocket conUsuario(String userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public RespuestaSocket conPagina(int pagina, int tamanoPagina, int total) {
+        this.pagina = pagina;
+        this.tamanoPagina = tamanoPagina;
+        this.total = total;
+        return this;
+    }
 
     /**
      * Representacion de depuracion de la respuesta completa.

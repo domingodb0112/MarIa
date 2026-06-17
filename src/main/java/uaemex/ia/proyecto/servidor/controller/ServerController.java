@@ -1,5 +1,6 @@
 package uaemex.ia.proyecto.servidor.controller;
 
+import uaemex.ia.proyecto.compartido.TlsConfig;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,6 +18,7 @@ public class ServerController {
     private static final Logger LOGGER = Logger.getLogger(ServerController.class.getName());
 
     private final int puerto;
+    private final TlsConfig tlsConfig;
     private final ExecutorService pool;
 
     /**
@@ -25,7 +27,12 @@ public class ServerController {
      * @param puerto puerto TCP donde se aceptaran conexiones.
      */
     public ServerController(int puerto) {
+        this(puerto, null);
+    }
+
+    public ServerController(int puerto, TlsConfig tlsConfig) {
         this.puerto = puerto;
+        this.tlsConfig = tlsConfig;
         this.pool = Executors.newCachedThreadPool();
     }
 
@@ -34,8 +41,9 @@ public class ServerController {
      */
     public void iniciar() {
         LOGGER.info(() -> "Iniciando en puerto " + puerto + "...");
-        try (ServerSocket serverSocket = new ServerSocket(puerto)) {
-            LOGGER.info("Listo. Esperando conexiones...");
+        try (ServerSocket serverSocket = TlsServerSockets.crear(puerto, tlsConfig)) {
+            LOGGER.info(() -> "Listo. Esperando conexiones. TLS="
+                    + (tlsConfig != null && tlsConfig.isEnabled()));
             while (true) {
                 Socket clienteSocket = serverSocket.accept();
                 LOGGER.info(() -> "Nueva conexion desde: "
@@ -43,7 +51,7 @@ public class ServerController {
                 // Un pool cacheado permite atender varios clientes sin bloquear nuevas conexiones.
                 pool.execute(new ManejadorCliente(clienteSocket));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error fatal en el servidor.", e);
         } finally {
             pool.shutdown();

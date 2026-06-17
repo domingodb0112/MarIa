@@ -2,14 +2,19 @@
 
 MarIA es un sistema distribuido de recomendacion musical desarrollado en Java. El proyecto gestiona una coleccion fisica de discos y vinilos, expone una interfaz Swing para el usuario y concentra la logica de inteligencia artificial en un servidor TCP que procesa mensajes JSON.
 
-## Organizacion del proyecto
+### Organizacion del proyecto
 
 ```text
 .
 ├── config.properties
 ├── data
 │   ├── catalogo.json
-│   └── coleccion.json
+│   ├── coleccion.json
+│   ├── coleccion.db                # Base de datos SQLite
+│   └── users                       # Almacenamiento aislado por usuario
+│       └── <userId>
+│           ├── recommendation_learning.json
+│           └── recommendation_history.json
 ├── lib
 │   └── gson-2.10.1.jar
 ├── pom.xml
@@ -24,16 +29,17 @@ MarIA es un sistema distribuido de recomendacion musical desarrollado en Java. E
     └── test/java
 ```
 
-Los archivos principales de datos estan en `data/`. `catalogo.json` funciona como catalogo base para recomendaciones y `coleccion.json` es la coleccion persistida que carga el servidor. Ambos usan objetos con los campos `titulo`, `artista`, `anio`, `genero` y `formato`.
+Los archivos principales de datos están en `data/`. `catalogo.json` funciona como catálogo base global para recomendaciones y `coleccion.json` es el conjunto inicial de discos que se utiliza para poblar la base de datos relacional SQLite (`coleccion.db`). Los datos de aprendizaje y fatiga de cada usuario se almacenan de manera aislada en `data/users/<userId>/`.
 
-`config.properties` centraliza la configuracion de red:
+`config.properties` centraliza la configuración de red y seguridad:
 
 ```properties
 server.ip=localhost
 server.port=5000
+server.tls.enabled=false
 ```
 
-El cliente usa `server.ip` y `server.port`; el servidor usa `server.port` y cae al puerto `5000` si el archivo no existe o el valor es invalido.
+El cliente usa `server.ip` y `server.port`; el servidor usa `server.port`. Si `server.tls.enabled` es `true`, la comunicación se cifrará utilizando sockets SSL/TLS.
 
 ## Arquitectura MVC
 
@@ -41,167 +47,96 @@ El proyecto aplica MVC de forma distribuida. La vista vive en el cliente, el con
 
 En el cliente:
 
-- `ClienteApp` lee `config.properties` y abre la interfaz Swing.
-- `VentanaPrincipal` organiza la ventana principal.
-- Los paneles de `cliente/view` separan formulario, busqueda, consultas, recomendaciones, estado y estadisticas.
-- `ClientPresenter` conecta eventos de la interfaz con peticiones al servidor.
-- `ClientController` administra el socket TCP, serializa solicitudes JSON, lee respuestas y ejecuta reconexion con backoff.
-- `HeartbeatCliente` envia `PING` periodicos para validar que la conexion siga viva.
+- `ClienteApp` lee la configuración e inicia la interfaz visual Swing.
+- `VentanaPrincipal` organiza el panel principal de la interfaz de usuario.
+- Los paneles de `cliente/view` desacoplan los distintos módulos (búsqueda paginada, formulario, estadísticas y recomendaciones).
+- `ClientPresenter` media entre las interacciones del usuario y la lógica de red.
+- `ClientController` administra la conexión por socket TCP (estándar o SSL/TLS vía `TlsClientSockets`), serializa peticiones JSON y maneja la lógica de reconexión asíncrona.
+- `HeartbeatCliente` mantiene un PING periódico para validar la salud de la red.
 
 En el servidor:
 
-- `ServidorApp` lee el puerto configurado e inicia el servidor.
-- `ServerController` abre el `ServerSocket` y delega cada cliente a un `ExecutorService`.
-- `ManejadorCliente` atiende un cliente por hilo, lee una linea JSON por solicitud y responde con una linea JSON.
-- `AccionesCliente` orquesta la logica de negocio: registro, listado, busqueda, recomendaciones y retroalimentacion.
-- `Database` mantiene la coleccion en memoria y la persiste en JSON.
-- Los agentes en `servidor/model/agentes` implementan el sistema multiagente.
+- `ServidorApp` inicia el servidor en el puerto e indica si se utilizará TLS.
+- `ServerController` abre el `ServerSocket` (estándar o SSL/TLS vía `TlsServerSockets`) y delega las conexiones de clientes a un `ExecutorService`.
+- `ManejadorCliente` atiende un cliente por hilo, delega a `TransactionLog` el logueo estructurado de cada mensaje entrante/saliente, y envía las solicitudes a `AccionesCliente`.
+- `AccionesCliente` orquesta la lógica de negocio multi-inquilino interactuando con los agentes correspondientes de acuerdo al `userId`.
+- `Database` actúa como fachada delegando las peticiones a `SqliteAlbumRepository` para interactuar con SQLite de forma segura.
+- Los agentes en `servidor/model/agentes` implementan la lógica del sistema multiagente.
 
-Las clases compartidas viven en `compartido` para que cliente y servidor usen el mismo contrato de datos:
+Las clases compartidas viven en `compartido` para asegurar el protocolo de datos común:
 
-- `Disco`: modelo de album fisico.
-- `MensajeSocket`: solicitud enviada por el cliente.
-- `RespuestaSocket`: respuesta enviada por el servidor.
+- `Disco`: modelo de álbum de música física.
+- `MensajeSocket`: petición del cliente que incluye `userId`, `pagina` y `tamanoPagina`.
+- `RespuestaSocket`: respuesta del servidor con soporte de paginación (`listaDiscos`, `totalDiscos`).
+- `TlsConfig`: utilidades comunes para cargar claves y certificados TLS.
 
 ## Sistema multiagente
 
-El sistema multiagente se ejecuta en el modelo del servidor. Cada agente tiene una responsabilidad acotada y `AccionesCliente` los coordina segun la accion recibida por socket.
+El sistema multiagente se ejecuta en el modelo del servidor y procesa las peticiones aislando la identidad de cada usuario a través de su `userId`.
 
 ### AgenteAnalizador
 
-`AgenteAnalizador` calcula el perfil de gustos a partir de la coleccion actual. Normaliza generos, cuenta frecuencias, calcula porcentajes y determina el genero favorito. Su resultado es un `PerfilGustos`, usado por el servidor para mostrar estadisticas y alimentar el recomendador.
-
-Flujo principal:
-
-1. Recibe la lista de discos desde `Database.getInstance().obtenerTodos()`.
-2. Normaliza el genero de cada disco.
-3. Ordena las frecuencias de mayor a menor.
-4. Devuelve total de discos, genero favorito, conteos y porcentajes.
+`AgenteAnalizador` calcula estadísticas de consumo musical a partir de la colección de un usuario específico. Determina los géneros dominantes, frecuencias de artistas, décadas y calcula los porcentajes de afinidad del usuario. Su salida es un `PerfilGustos`.
 
 ### AgenteBuscador
 
-`AgenteBuscador` realiza busquedas aproximadas por titulo, artista o genero. Usa `SimilarityUtils` para normalizar texto, calcular distancia Levenshtein y obtener una clave fonetica pensada para errores comunes en espanol.
-
-La busqueda:
-
-1. Normaliza la consulta.
-2. Compara contra titulo, artista y genero de cada disco.
-3. Acepta candidatos dentro de un umbral dependiente de la longitud de la consulta.
-4. Ordena por mejor coincidencia y devuelve hasta 10 resultados.
-
-Esto permite tolerar acentos omitidos, diferencias de mayusculas, errores pequenos y coincidencias foneticas.
+`AgenteBuscador` realiza búsquedas aproximadas mediante Levenshtein y normalización de clave fonética en español. Permite tolerar errores de tipeado (como `v/b`, acentos omitidos o la `h` muda). Ahora soporta paginación física delegada al repositorio SQLite para consultas de alta velocidad.
 
 ### AgenteRecomendador
 
-`AgenteRecomendador` es un singleton compartido por los hilos del servidor. Genera hasta 8 recomendaciones evitando discos que ya existen en la coleccion del usuario.
-
-Sus senales principales son:
-
-- Perfil de gustos calculado por `AgenteAnalizador`.
-- Afinidad historica de artistas y decadas mediante `PerfilAfinidad`.
-- Aprendizaje por retroalimentacion con `BrazoRecomendacion`.
-- Exploracion epsilon para no repetir siempre la misma ruta.
-- Penalizacion de recomendaciones recientes con `HistorialRecomendacion`.
-
-El aprendizaje se guarda con `RecomendadorStorage` en archivos JSON auxiliares dentro de `data/`, como `recommendation_learning.json` y `recommendation_history.json` cuando el sistema los genera.
-
-La retroalimentacion entra por las acciones `ACEPTAR_RECOMENDACION` y `RECHAZAR_RECOMENDACION`. Cada respuesta actualiza senales por genero, artista y decada.
+`AgenteRecomendador` es un singleton que genera sugerencias musicales utilizando aprendizaje por refuerzo (Bandido Multibrazo), afinidades históricas por artista/década y control de fatiga.
+* El estado del bandido y el historial de recomendaciones recientes se guardan de forma aislada por usuario en `data/users/<userId>/recommendation_learning.json` y `data/users/<userId>/recommendation_history.json`.
+* Las acciones `ACEPTAR_RECOMENDACION` y `RECHAZAR_RECOMENDACION` se rigen bajo este mismo aislamiento, permitiendo que las decisiones de un usuario no afecten las recomendaciones de otros inquilinos.
 
 ## Protocolo socket JSON
 
-La comunicacion usa sockets TCP y Gson. Cada mensaje viaja como una linea JSON completa; por eso `ManejadorCliente` usa `BufferedReader.readLine()` y el cliente escribe con `PrintWriter.println()`.
+La comunicación usa sockets TCP y Gson. Cada mensaje viaja como una única línea JSON.
 
-Solicitud:
+Ejemplo de solicitud paginada de colección:
 
 ```json
 {
-  "transaccionId": "uuid",
-  "accion": "BUSCAR_ALBUM",
-  "datos": {
-    "titulo": "Kind of Blue",
-    "artista": "Miles Davis",
-    "anio": 1959,
-    "genero": "Jazz",
-    "formato": "Vinilo"
-  }
+  "transaccionId": "t-list-123",
+  "userId": "usuario-maria-9",
+  "accion": "LISTAR_DISCOS",
+  "pagina": 1,
+  "tamanoPagina": 10
 }
 ```
 
-Respuesta con disco:
+Respuesta del servidor con paginación y log estructurado:
 
 ```json
 {
-  "transaccionId": "uuid",
+  "transaccionId": "t-list-123",
   "status": "OK",
-  "mensaje": "Disco registrado y guardado correctamente.",
-  "datos": {
-    "titulo": "Kind of Blue",
-    "artista": "Miles Davis",
-    "anio": 1959,
-    "genero": "Jazz",
-    "formato": "Vinilo"
-  }
+  "mensaje": "Mostrando pagina 1 de 1",
+  "listaDiscos": [
+    {
+      "titulo": "Bocanada",
+      "artista": "Gustavo Cerati",
+      "anio": 1999,
+      "genero": "Rock",
+      "formato": "CD"
+    }
+  ],
+  "totalDiscos": 1
 }
 ```
 
-Respuesta con lista:
-
-```json
-{
-  "transaccionId": "uuid",
-  "status": "OK",
-  "mensaje": "8 recomendacion(es) generada(s) segun tu perfil: Salsa",
-  "listaDiscos": []
-}
-```
-
-Respuesta de error:
-
-```json
-{
-  "transaccionId": "uuid",
-  "status": "ERROR",
-  "mensaje": "Accion no reconocida: ACCION_INVALIDA"
-}
-```
-
-Acciones soportadas por `ManejadorCliente`:
-
-- `PING`: responde `PONG`.
-- `REGISTRAR_DISCO`: valida, evita duplicados y persiste un disco.
-- `LISTAR_DISCOS`: devuelve toda la coleccion.
-- `BUSCAR_ALBUM`: busca por titulo, artista o genero.
-- `OBTENER_RECOMENDACIONES`: genera recomendaciones personalizadas.
-- `ACEPTAR_RECOMENDACION`: registra retroalimentacion positiva.
-- `RECHAZAR_RECOMENDACION`: registra retroalimentacion negativa.
-
-`RegistroTransacciones` evita reprocesar solicitudes idempotentes cuando el cliente reintenta por fallos de red.
+Cada petición en el socket es capturada por `TransactionLog` y logueada con el siguiente formato estructurado:
+`INFORMACIÓN: event=socket_received correlationId=t-list-123 userId=usuario-maria-9 remote=/127.0.0.1:54988 action=LISTAR_DISCOS page=1 size=10`
+`INFORMACIÓN: event=socket_response correlationId=t-list-123 userId=usuario-maria-9 action=LISTAR_DISCOS status=OK total=1`
 
 ## Base de datos y catalogo
 
-`Database` es un singleton del servidor. Al iniciar, lee `data/coleccion.json` si existe; si no existe, crea una coleccion vacia en memoria. Cuando se registra un disco, lo agrega a la lista y llama a `persistir()`.
+La colección de discos se gestiona de forma persistente en SQLite utilizando la clase SqliteAlbumRepository.java.
 
-La persistencia usa una escritura defensiva:
+* **Bootstrap inicial:** Al iniciar el servidor por primera vez, si el archivo `data/coleccion.db` no existe, se ejecuta JsonCollectionBootstrap.java, el cual lee coleccion.json y migra todos los registros a la base de datos relacional SQLite bajo el usuario por defecto `default-user`.
+* **Esquema:** La tabla `discos` cuenta con columnas `id`, `user_id`, `titulo`, `artista`, `anio`, `genero` y `formato`, garantizando restricciones de unicidad por combinación de `user_id`, `titulo` y `artista`.
+* **Paginación:** Todas las operaciones de listado y búsqueda incluyen cláusulas `LIMIT` y `OFFSET` en SQL para garantizar un rendimiento óptimo de la memoria del servidor.
 
-1. Crea el directorio `data` si hace falta.
-2. Escribe primero `data/coleccion.json.tmp`.
-3. Reemplaza `data/coleccion.json` con `Files.move`.
-4. Intenta `ATOMIC_MOVE`; si el sistema de archivos no lo soporta, usa reemplazo normal.
-5. Borra el temporal si queda presente.
-
-El catalogo base para recomendaciones vive en `data/catalogo.json`. La herramienta `ImportadorColeccion` puede leer un catalogo y generar una salida balanceada:
-
-```bash
-javac -cp target/classes:lib/gson-2.10.1.jar -d target/classes src/main/java/uaemex/ia/proyecto/herramientas/ImportadorColeccion.java
-java -cp target/classes:lib/gson-2.10.1.jar uaemex.ia.proyecto.herramientas.ImportadorColeccion
-```
-
-Para validar la distribucion actual:
-
-```bash
-jq 'length' data/catalogo.json
-jq 'group_by(.genero) | map({genero: .[0].genero, total: length}) | sort_by(.genero)' data/catalogo.json
-```
+El catálogo base para recomendaciones sigue leyéndose desde catalogo.json.
 
 ## Configuracion y ejecucion
 
@@ -211,17 +146,10 @@ Compilar y probar:
 mvn test
 ```
 
-Iniciar servidor:
+Iniciar servidor (el puerto se obtiene de `config.properties`, por defecto `5000`):
 
 ```bash
-mvn -q exec:java -Dexec.mainClass=uaemex.ia.proyecto.servidor.ServidorApp
-```
-
-Si no se usa el plugin de Maven, se puede ejecutar desde clases compiladas:
-
-```bash
-mvn compile
-java -cp target/classes:lib/gson-2.10.1.jar uaemex.ia.proyecto.servidor.ServidorApp
+java -cp target/classes:lib/gson-2.10.1.jar:lib/sqlite-jdbc-3.45.1.0.jar uaemex.ia.proyecto.servidor.ServidorApp
 ```
 
 Iniciar cliente:
@@ -230,66 +158,33 @@ Iniciar cliente:
 java -cp target/classes:lib/gson-2.10.1.jar uaemex.ia.proyecto.cliente.ClienteApp
 ```
 
-Para despliegue en dos computadoras:
-
-1. Conectar ambas maquinas a la misma red.
-2. En la maquina servidor, obtener la IPv4 local.
-3. Editar `config.properties` en la maquina cliente:
-
-```properties
-server.ip=192.168.1.45
-server.port=5000
-```
-
-4. Ejecutar primero `ServidorApp`.
-5. Ejecutar despues `ClienteApp`.
+### Habilitar seguridad TLS
+Para forzar la comunicación encriptada:
+1. Cambia `server.tls.enabled=true` en `config.properties`.
+2. El sistema creará sockets utilizando los almacenes de llaves internos definidos por `TlsConfig`.
 
 ## Troubleshooting
 
-### El cliente muestra que no puede conectar
+### Error: `org.sqlite.SQLiteException: [SQLITE_BUSY]`
+El archivo SQLite de la base de datos se encuentra bloqueado por otro proceso. Asegúrate de que no haya múltiples instancias del servidor corriendo simultáneamente.
 
-Revisar que el servidor este ejecutandose y que `server.ip` apunte a la IP correcta. En pruebas locales debe bastar con `server.ip=localhost`.
+### Error de TLS / SSL Handshake Exception
+Se produce cuando hay incompatibilidad de certificados entre cliente y servidor. Si se activa `server.tls.enabled=true`, asegúrate de que ambos extremos carguen los mismos almacenes de llaves y certificados del paquete `compartido/TlsConfig`.
 
-Tambien validar conectividad:
-
-```bash
-ping 192.168.1.45
-```
-
-### El puerto esta ocupado
-
-Cambiar `server.port` en `config.properties` y reiniciar tanto cliente como servidor. El puerto debe estar entre `1` y `65535`.
-
-### El firewall bloquea la conexion
-
-Permitir conexiones TCP entrantes hacia el puerto configurado en la maquina servidor. En Windows, agregar una regla de entrada para Java o para el puerto `5000`. En Linux, revisar reglas de `ufw` o del firewall activo.
-
-### El servidor no responde o el cliente se desconecta
-
-`ClientController` usa timeout de conexion, timeout de lectura y reconexion con backoff. Si todos los reintentos fallan, revisar logs del servidor, direccion IP, firewall y que no haya otra aplicacion usando el puerto.
-
-### Aparece `JSON malformado`
-
-Cada solicitud debe enviarse como una sola linea JSON completa. No enviar fragmentos multilnea por el socket. Validar que la estructura coincida con `MensajeSocket`.
-
-### Las recomendaciones salen vacias
-
-Verificar que `data/catalogo.json` tenga discos y que no todos esten ya presentes en `data/coleccion.json`. El recomendador filtra los discos existentes por titulo y artista normalizados.
-
-### La coleccion no se guarda
-
-Revisar permisos de escritura sobre el directorio `data`. El servidor necesita poder crear `data/coleccion.json.tmp` y reemplazar `data/coleccion.json`.
-
-### Busquedas sin resultados esperados
-
-La busqueda usa titulo, artista o genero. Si el formulario envia campos vacios, el servidor responde `Se requiere titulo, artista o genero.`. Probar con una palabra corta del titulo o el genero exacto para aislar el problema.
+### Las recomendaciones de un usuario se mezclan con las de otro
+Asegúrate de que el cliente esté enviando el parámetro `userId` único en la cabecera de la trama `MensajeSocket`. De lo contrario, se utilizará el identificador por defecto `default-user`.
 
 ## Pruebas automatizadas
 
-El proyecto incluye pruebas para componentes de red, busqueda y transacciones. Ejecutar:
+El proyecto incluye 10 pruebas automatizadas divididas en:
+1. **Pruebas de red:** Validación de comunicación socket PING/PONG.
+2. **Pruebas de idempotencia:** Verificación de no duplicidad de transacciones idénticas en caché LRU.
+3. **Pruebas del Buscador:** Testeo de distancias fonéticas y Levenshtein en español.
+4. **Pruebas de Persistencia SQLite:** Creación de tablas, inserción, paginación física y restricciones de unicidad de discos.
+5. **Pruebas de Aprendizaje Multi-Usuario:** Validación de aislamiento de gustos entre usuarios, convergencia de feedback positivo/negativo e inclinación por políticas épsilon-greedy.
 
+Ejecutar las pruebas:
 ```bash
 mvn test
 ```
-
-Una ejecucion correcta debe terminar con `BUILD SUCCESS`.
+Una suite exitosa finalizará con `BUILD SUCCESS`.

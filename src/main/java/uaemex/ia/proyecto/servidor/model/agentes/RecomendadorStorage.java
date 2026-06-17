@@ -49,7 +49,11 @@ public final class RecomendadorStorage {
      * @return mapa mutable de género/decada/artista y sus puntuaciones.
      */
     public static Map<String, BrazoRecomendacion> cargarAprendizaje() {
-        File file = new File(ARCHIVO_APRENDIZAJE);
+        return cargarAprendizaje("default-user");
+    }
+
+    public static Map<String, BrazoRecomendacion> cargarAprendizaje(String userId) {
+        File file = new File(rutaUsuario(userId, "recommendation_learning.json", ARCHIVO_APRENDIZAJE));
         if (!file.exists()) return new HashMap<>();
         try (Reader reader = new FileReader(file)) {
             Type type = new TypeToken<Map<String, BrazoRecomendacion>>() {}.getType();
@@ -67,8 +71,13 @@ public final class RecomendadorStorage {
      * @param map mapa de aprendizaje a guardar.
      */
     public static void guardarAprendizaje(Map<String, BrazoRecomendacion> map) {
-        new File("data").mkdirs();
-        try (Writer writer = new FileWriter(ARCHIVO_APRENDIZAJE)) {
+        guardarAprendizaje("default-user", map);
+    }
+
+    public static void guardarAprendizaje(String userId, Map<String, BrazoRecomendacion> map) {
+        File file = new File(rutaUsuario(userId, "recommendation_learning.json", ARCHIVO_APRENDIZAJE));
+        file.getParentFile().mkdirs();
+        try (Writer writer = new FileWriter(file)) {
             GSON.toJson(map, writer);
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Error al guardar aprendizaje.", e);
@@ -81,7 +90,11 @@ public final class RecomendadorStorage {
      * @return lista de registros de historial.
      */
     public static List<HistorialRecomendacion> cargarHistorial() {
-        File file = new File(ARCHIVO_HISTORIAL);
+        return cargarHistorial("default-user");
+    }
+
+    public static List<HistorialRecomendacion> cargarHistorial(String userId) {
+        File file = new File(rutaUsuario(userId, "recommendation_history.json", ARCHIVO_HISTORIAL));
         if (!file.exists()) return new ArrayList<>();
         try (Reader reader = new FileReader(file)) {
             Type type = new TypeToken<List<HistorialRecomendacion>>() {}.getType();
@@ -99,11 +112,24 @@ public final class RecomendadorStorage {
      * @param history lista de registros a guardar.
      */
     public static void guardarHistorial(List<HistorialRecomendacion> history) {
-        new File("data").mkdirs();
-        try (Writer writer = new FileWriter(ARCHIVO_HISTORIAL)) {
+        guardarHistorial("default-user", history);
+    }
+
+    public static void guardarHistorial(String userId, List<HistorialRecomendacion> history) {
+        File file = new File(rutaUsuario(userId, "recommendation_history.json", ARCHIVO_HISTORIAL));
+        file.getParentFile().mkdirs();
+        try (Writer writer = new FileWriter(file)) {
             GSON.toJson(history, writer);
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Error al guardar historial.", e);
         }
+    }
+
+    private static String rutaUsuario(String userId, String fileName, String legacy) {
+        if (userId == null || userId.trim().isEmpty() || "default-user".equals(userId)) {
+            return legacy;
+        }
+        String safe = userId.trim().replaceAll("[^A-Za-z0-9._-]", "_");
+        return "data/users/" + safe + "/" + fileName;
     }
 }

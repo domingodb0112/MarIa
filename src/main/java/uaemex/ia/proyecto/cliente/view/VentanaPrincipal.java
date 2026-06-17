@@ -1,6 +1,7 @@
 package uaemex.ia.proyecto.cliente.view;
 
 import uaemex.ia.proyecto.compartido.Disco;
+import uaemex.ia.proyecto.compartido.TlsConfig;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -19,9 +20,13 @@ public class VentanaPrincipal extends JFrame {
     private JTextArea areaLog;
 
     public VentanaPrincipal(String host, int puerto) {
+        this(host, puerto, "default-user", null);
+    }
+
+    public VentanaPrincipal(String host, int puerto, String userId, TlsConfig tlsConfig) {
         super("MarIA - Sistema de Recomendacion Musical");
         UIStyles.setupLookAndFeel();
-        this.presenter = new ClientPresenter(this, host, puerto);
+        this.presenter = new ClientPresenter(this, host, puerto, userId, tlsConfig);
         initUI();
         presenter.conectar(); // Intenta conectar al arrancar
     }

@@ -3,8 +3,8 @@ package uaemex.ia.proyecto.cliente.controller;
 import com.google.gson.Gson;
 import uaemex.ia.proyecto.compartido.MensajeSocket;
 import uaemex.ia.proyecto.compartido.RespuestaSocket;
+import uaemex.ia.proyecto.compartido.TlsConfig;
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
@@ -20,6 +20,7 @@ public class ClientController {
 
     private final String host;
     private final int puerto;
+    private final TlsConfig tlsConfig;
     private final Gson gson = new Gson();
     private Socket socket;
     private PrintWriter salida;
@@ -27,23 +28,22 @@ public class ClientController {
     private final HeartbeatCliente heartbeat = new HeartbeatCliente(this);
 
     public ClientController(String host, int puerto) {
-        this.host = host;
-        this.puerto = puerto;
+        this(host, puerto, null);
     }
 
-    /**
-     * Establece la conexión e inicia el latido periódico de red.
-     */
+    public ClientController(String host, int puerto, TlsConfig tlsConfig) {
+        this.host = host;
+        this.puerto = puerto;
+        this.tlsConfig = tlsConfig;
+    }
+
     public synchronized void conectar() throws IOException {
         desconectar();
         abrirSocket();
-        heartbeat.iniciar(); // Inicia el latido PING
+        heartbeat.iniciar();
         LOGGER.info(() -> "Conectado a " + host + ":" + puerto);
     }
 
-    /**
-     * Envía un mensaje de forma segura. Si la conexión falla, intenta reconectar con backoff.
-     */
     public synchronized RespuestaSocket enviarMensaje(MensajeSocket mensaje) throws IOException {
         if (!estaConectado()) reconectarConBackoff();
         try {
@@ -55,16 +55,15 @@ public class ClientController {
         }
     }
 
-    // Ejecuta una petición atómica de red
     private RespuestaSocket enviarUnaVez(MensajeSocket mensaje) throws IOException {
         String json = gson.toJson(mensaje);
-        salida.println(json); // Escribe trama en socket
+        salida.println(json);
         if (salida.checkError()) {
             desconectar();
             throw new IOException("No se pudo enviar el mensaje al servidor.");
         }
         try {
-            String resp = entrada.readLine(); // Espera respuesta del socket
+            String resp = entrada.readLine();
             if (resp == null) {
                 desconectar();
                 throw new IOException("El servidor cerro la conexion.");
@@ -76,7 +75,6 @@ public class ClientController {
         }
     }
 
-    // Envía el mensaje PING para validar el estado del servidor
     synchronized void enviarHeartbeat() throws IOException {
         if (!estaConectado()) reconectarConBackoff();
         RespuestaSocket respuesta = enviarUnaVez(new MensajeSocket("PING", null));
@@ -86,7 +84,6 @@ public class ClientController {
         }
     }
 
-    // Ciclo de reconexión con incrementos exponenciales de tiempo (backoff)
     private void reconectarConBackoff() throws IOException {
         IOException ultimoError = null;
         long espera = BACKOFF_INICIAL_MS;
@@ -94,22 +91,24 @@ public class ClientController {
             try {
                 desconectar();
                 abrirSocket();
-                heartbeat.iniciar(); // Reinicia el latido PING
+                heartbeat.iniciar();
                 LOGGER.info(() -> "Reconexion exitosa a " + host + ":" + puerto);
                 return;
             } catch (IOException e) {
                 ultimoError = e;
                 dormirBackoff(espera, intento);
-                espera = Math.min(espera * 2, BACKOFF_MAX_MS); // Duplica el tiempo
+                espera = Math.min(espera * 2, BACKOFF_MAX_MS);
             }
         }
         throw new IOException("No se pudo reconectar tras " + MAX_REINTENTOS + " intento(s).", ultimoError);
     }
 
-    // Instancia el Socket y prepara los flujos de lectura/escritura
     private void abrirSocket() throws IOException {
-        socket = new Socket();
-        socket.connect(new InetSocketAddress(host, puerto), CONNECT_TIMEOUT_MS);
+        try {
+            socket = TlsClientSockets.conectar(host, puerto, CONNECT_TIMEOUT_MS, tlsConfig);
+        } catch (Exception e) {
+            throw new IOException("No se pudo abrir socket TLS/TCP.", e);
+        }
         socket.setSoTimeout(READ_TIMEOUT_MS);
         salida = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
         entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -129,11 +128,8 @@ public class ClientController {
         return socket != null && socket.isConnected() && !socket.isClosed();
     }
 
-    /**
-     * Cierra el socket y detiene los latidos de red.
-     */
     public synchronized void desconectar() {
-        heartbeat.detener(); // Detiene el latidor
+        heartbeat.detener();
         if (socket != null && !socket.isClosed()) {
             try { socket.close(); } catch (IOException ignored) {}
         }

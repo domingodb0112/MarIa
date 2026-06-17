@@ -51,11 +51,9 @@ public class ManejadorCliente implements Runnable {
             String lineaJson;
             while ((lineaJson = entrada.readLine()) != null) {
                 final String jsonRecibido = lineaJson;
-                LOGGER.fine(() -> "JSON recibido de " + direccion + ": " + jsonRecibido);
                 // Cada linea representa una solicitud independiente dentro de la misma conexion.
-                RespuestaSocket respuesta = procesarMensaje(jsonRecibido);
+                RespuestaSocket respuesta = procesarMensaje(jsonRecibido, direccion);
                 String jsonRespuesta = gson.toJson(respuesta);
-                LOGGER.fine(() -> "JSON enviado a " + direccion + ": " + jsonRespuesta);
                 salida.println(jsonRespuesta);
             }
         } catch (IOException e) {
@@ -73,29 +71,40 @@ public class ManejadorCliente implements Runnable {
      * @return respuesta serializable para enviar al cliente.
      */
     RespuestaSocket procesarMensaje(String lineaJson) {
+        return procesarMensaje(lineaJson, "test");
+    }
+
+    RespuestaSocket procesarMensaje(String lineaJson, String direccion) {
         MensajeSocket mensaje;
         try {
             mensaje = gson.fromJson(lineaJson, MensajeSocket.class);
         } catch (JsonSyntaxException e) {
+            TransactionLog.error(LOGGER, "N/A", "JSON malformado");
             return RespuestaSocket.error("N/A", "JSON malformado: " + e.getMessage());
         }
 
         if (mensaje.getAccion() == null) {
+            TransactionLog.error(LOGGER, mensaje.correlationId(), "accion obligatoria");
             return RespuestaSocket.error(mensaje.getTransaccionId(), "El campo 'accion' es obligatorio.");
         }
 
+        TransactionLog.recibido(LOGGER, direccion, mensaje);
+        RespuestaSocket respuesta;
         // El protocolo se mantiene explicito para que cliente y servidor compartan los mismos nombres.
         switch (mensaje.getAccion()) {
-            case "PING":                    return RespuestaSocket.ok(mensaje.getTransaccionId(), "PONG", null);
-            case "REGISTRAR_DISCO":         return acciones.registrarDisco(mensaje);
-            case "LISTAR_DISCOS":           return acciones.listarDiscos(mensaje);
-            case "BUSCAR_ALBUM":            return acciones.buscarAlbum(mensaje);
-            case "OBTENER_RECOMENDACIONES": return acciones.obtenerRecomendaciones(mensaje);
-            case "ACEPTAR_RECOMENDACION":   return acciones.registrarFeedbackRecomendacion(mensaje, true);
-            case "RECHAZAR_RECOMENDACION":  return acciones.registrarFeedbackRecomendacion(mensaje, false);
+            case "PING":                    respuesta = RespuestaSocket.ok(mensaje.getTransaccionId(), "PONG", null); break;
+            case "REGISTRAR_DISCO":         respuesta = acciones.registrarDisco(mensaje); break;
+            case "LISTAR_DISCOS":           respuesta = acciones.listarDiscos(mensaje); break;
+            case "BUSCAR_ALBUM":            respuesta = acciones.buscarAlbum(mensaje); break;
+            case "OBTENER_RECOMENDACIONES": respuesta = acciones.obtenerRecomendaciones(mensaje); break;
+            case "ACEPTAR_RECOMENDACION":   respuesta = acciones.registrarFeedbackRecomendacion(mensaje, true); break;
+            case "RECHAZAR_RECOMENDACION":  respuesta = acciones.registrarFeedbackRecomendacion(mensaje, false); break;
             default:
-                return RespuestaSocket.error(mensaje.getTransaccionId(),
+                respuesta = RespuestaSocket.error(mensaje.getTransaccionId(),
                         "Accion no reconocida: " + mensaje.getAccion());
         }
+        respuesta.conUsuario(mensaje.getUserId());
+        TransactionLog.respondido(LOGGER, mensaje, respuesta);
+        return respuesta;
     }
 }

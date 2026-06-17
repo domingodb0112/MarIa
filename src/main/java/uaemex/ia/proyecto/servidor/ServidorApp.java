@@ -1,6 +1,7 @@
 package uaemex.ia.proyecto.servidor;
 
 import uaemex.ia.proyecto.servidor.controller.ServerController;
+import uaemex.ia.proyecto.compartido.TlsConfig;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,8 +25,9 @@ public class ServidorApp {
      * @param args argumentos de consola no utilizados por la aplicacion.
      */
     public static void main(String[] args) {
-        int puerto = cargarPuertoServidor();
-        ServerController servidor = new ServerController(puerto);
+        Properties config = cargarConfiguracion();
+        int puerto = leerPuerto(config.getProperty("server.port"));
+        ServerController servidor = new ServerController(puerto, new TlsConfig(config));
         servidor.iniciar();
     }
 
@@ -34,16 +36,16 @@ public class ServidorApp {
      *
      * @return puerto valido para abrir el ServerSocket.
      */
-    private static int cargarPuertoServidor() {
+    private static Properties cargarConfiguracion() {
         Properties props = new Properties();
         try (InputStream entrada = new FileInputStream(CONFIG_FILE)) {
             props.load(entrada);
-            return leerPuerto(props.getProperty("server.port"));
         } catch (IOException e) {
             LOGGER.info(() -> "No se encontro " + CONFIG_FILE
                     + ". Usando puerto por defecto " + DEFAULT_PORT);
-            return DEFAULT_PORT;
+            props.setProperty("server.port", String.valueOf(DEFAULT_PORT));
         }
+        return props;
     }
 
     /**

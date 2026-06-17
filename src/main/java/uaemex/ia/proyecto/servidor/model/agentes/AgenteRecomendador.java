@@ -10,24 +10,25 @@ public class AgenteRecomendador {
     private static final int MAX_RECOMENDACIONES = 8;
     private static final double PESO_APRENDIZAJE = 20.0;
     private static final double EPSILON_EXPLORACION = 0.15;
-    private static final Random RANDOM = new Random();
     private static final List<Disco> CATALOGO_CACHE = RecomendadorStorage.cargarCatalogo();
     private static final AgenteRecomendador INSTANCE = new AgenteRecomendador();
 
     private final List<Disco> catalogoClasico = CATALOGO_CACHE;
-    private final Map<String, BrazoRecomendacion> aprendizajePorGenero;
-    private final List<HistorialRecomendacion> historial;
-
-    private AgenteRecomendador() {
-        this.aprendizajePorGenero = RecomendadorStorage.cargarAprendizaje();
-        this.historial = RecomendadorStorage.cargarHistorial();
+    private final Map<String, Map<String, BrazoRecomendacion>> aprendizajePorUsuario = new HashMap<>();
+    private final Map<String, List<HistorialRecomendacion>> historialPorUsuario = new HashMap<>();
+    private final Random random;
+    private final boolean persistir;
+    private AgenteRecomendador() { this(new Random(), true); }
+    AgenteRecomendador(Random random) { this(random, false); }
+    AgenteRecomendador(Random random, boolean persistir) {
+        this.random = random;
+        this.persistir = persistir;
     }
-
-    public static AgenteRecomendador getInstance() {
-        return INSTANCE;
-    }
-
+    public static AgenteRecomendador getInstance() { return INSTANCE; }
     public synchronized List<Disco> recomendar(PerfilGustos perfil, List<Disco> coleccionUsuario) {
+        return recomendar("default-user", perfil, coleccionUsuario);
+    }
+    public synchronized List<Disco> recomendar(String userId, PerfilGustos perfil, List<Disco> coleccionUsuario) {
         if (coleccionUsuario == null) coleccionUsuario = Collections.emptyList();
         Set<String> discosExistentes = crearIndiceColeccion(coleccionUsuario);
         PerfilAfinidad afinidad = new PerfilAfinidad(coleccionUsuario);
@@ -35,14 +36,13 @@ public class AgenteRecomendador {
         candidatos = IntStream.range(0, catalogoClasico.size())
                 .filter(i -> !discosExistentes.contains(claveDisco(catalogoClasico.get(i))))
                 .mapToObj(i -> new DiscoPuntuado(catalogoClasico.get(i),
-                        calcularPuntaje(perfil, afinidad, catalogoClasico.get(i), i)))
+                        calcularPuntaje(userId, perfil, afinidad, catalogoClasico.get(i), i)))
                 .collect(Collectors.toList());
 
         List<Disco> recomendaciones = seleccionarDiversasPorArtista(candidatos, afinidad);
-        registrarHistorial(recomendaciones);
+        registrarHistorial(userId, recomendaciones);
         return recomendaciones;
     }
-
     private List<Disco> seleccionarDiversasPorArtista(List<DiscoPuntuado> candidatos, PerfilAfinidad afinidad) {
         Map<String, Integer> artistasSeleccionados = new HashMap<>();
         return candidatos.stream()
@@ -56,32 +56,30 @@ public class AgenteRecomendador {
                 .map(DiscoPuntuado::getDisco)
                 .collect(Collectors.toList());
     }
-
     public synchronized void registrarRetroalimentacion(Disco disco, boolean aceptada) {
+        registrarRetroalimentacion("default-user", disco, aceptada);
+    }
+    public synchronized void registrarRetroalimentacion(String userId, Disco disco, boolean aceptada) {
         if (disco == null || disco.getGenero() == null || disco.getGenero().trim().isEmpty()) return;
+        Map<String, BrazoRecomendacion> aprendizaje = aprendizaje(userId);
         String genero = "genero:" + SimilarityUtils.normalizar(disco.getGenero());
         String artista = "artista:" + SimilarityUtils.normalizar(disco.getArtista());
         String decada = "decada:" + SimilarityUtils.decada(disco.getAnio());
-        registrarSenalAprendizaje(genero, aceptada);
-        registrarSenalAprendizaje(artista, aceptada);
-        registrarSenalAprendizaje(decada, aceptada);
-        RecomendadorStorage.guardarAprendizaje(aprendizajePorGenero);
+        registrarSenalAprendizaje(aprendizaje, genero, aceptada);
+        registrarSenalAprendizaje(aprendizaje, artista, aceptada);
+        registrarSenalAprendizaje(aprendizaje, decada, aceptada);
+        if (persistir) RecomendadorStorage.guardarAprendizaje(userId, aprendizaje);
     }
-
-    private void registrarSenalAprendizaje(String clave, boolean aceptada) {
+    private void registrarSenalAprendizaje(Map<String, BrazoRecomendacion> aprendizaje, String clave, boolean aceptada) {
         if (clave.endsWith(":") || clave.endsWith(":0")) return;
-        aprendizajePorGenero.computeIfAbsent(clave, g -> new BrazoRecomendacion()).registrar(aceptada ? 1.0 : -1.0);
+        aprendizaje.computeIfAbsent(clave, g -> new BrazoRecomendacion()).registrar(aceptada ? 1.0 : -1.0);
     }
-
-    private double calcularPuntaje(PerfilGustos perfil, PerfilAfinidad afinidad, Disco disco, int posicionCatalogo) {
+    private double calcularPuntaje(String userId, PerfilGustos perfil, PerfilAfinidad afinidad, Disco disco, int posicionCatalogo) {
         String genero = SimilarityUtils.normalizar(disco.getGenero());
-        double exploracion = RANDOM.nextDouble() < EPSILON_EXPLORACION ? RANDOM.nextDouble() * 3.0 : 0.0;
-        double refuerzo = (valorAprendido("genero:" + genero)
-                + valorAprendido(genero)
-                + valorAprendido("artista:" + SimilarityUtils.normalizar(disco.getArtista()))
-                + valorAprendido("decada:" + SimilarityUtils.decada(disco.getAnio()))) * PESO_APRENDIZAJE;
+        double exploracion = random.nextDouble() < EPSILON_EXPLORACION ? random.nextDouble() * 3.0 : 0.0;
+        double refuerzo = refuerzoAprendido(userId, disco, genero);
         double afinidadHistorica = afinidad.afinidadArtista(disco) + afinidad.afinidadDecada(disco);
-        double penalizacionReciente = penalizacionHistorial(disco);
+        double penalizacionReciente = penalizacionHistorial(userId, disco);
 
         if (perfil == null || perfil.getTotalDiscos() == 0) {
             return 1.0 - (posicionCatalogo * 0.01) + refuerzo + exploracion - penalizacionReciente;
@@ -98,39 +96,47 @@ public class AgenteRecomendador {
         return porcentajeGenero + bonoGeneroFavorito + bonoDiversidad + desempateCatalogo
                 + refuerzo + exploracion + afinidadHistorica - penalizacionReciente;
     }
-
-    private double valorAprendido(String clave) {
-        return aprendizajePorGenero.getOrDefault(clave, new BrazoRecomendacion()).valorEsperado();
+    private double refuerzoAprendido(String userId, Disco disco, String genero) {
+        return (valorAprendido(userId, "genero:" + genero)
+                + valorAprendido(userId, genero)
+                + valorAprendido(userId, "artista:" + SimilarityUtils.normalizar(disco.getArtista()))
+                + valorAprendido(userId, "decada:" + SimilarityUtils.decada(disco.getAnio()))) * PESO_APRENDIZAJE;
     }
-
-    private double penalizacionHistorial(Disco disco) {
+    double valorAprendido(String userId, String clave) {
+        return aprendizaje(userId).getOrDefault(clave, new BrazoRecomendacion()).valorEsperado();
+    }
+    private double penalizacionHistorial(String userId, Disco disco) {
         String clave = claveDisco(disco);
         String artista = SimilarityUtils.normalizar(disco.getArtista());
         int decada = SimilarityUtils.decada(disco.getAnio());
         long reciente = System.currentTimeMillis() - (7L * 24 * 60 * 60 * 1000);
-        return historial.stream().filter(h -> h.getTimestamp() >= reciente)
+        return historial(userId).stream().filter(h -> h.getTimestamp() >= reciente)
                 .mapToDouble(h -> {
                     if (clave.equals(h.getClaveDisco())) return 18.0;
                     double pen = artista.equals(h.getArtistaNormalizado()) ? 3.0 : 0.0;
                     return decada > 0 && decada == h.getDecada() ? pen + 1.0 : pen;
                 }).sum();
     }
-
     private Set<String> crearIndiceColeccion(List<Disco> coleccionUsuario) {
         Set<String> indice = new HashSet<>();
         for (Disco disco : coleccionUsuario) indice.add(claveDisco(disco));
         return indice;
     }
-
     private String claveDisco(Disco disco) {
         return SimilarityUtils.normalizar(disco.getTitulo()) + "|" + SimilarityUtils.normalizar(disco.getArtista());
     }
-
-    private void registrarHistorial(List<Disco> recomendaciones) {
+    private void registrarHistorial(String userId, List<Disco> recomendaciones) {
+        List<HistorialRecomendacion> historial = historial(userId);
         for (Disco disco : recomendaciones) {
             historial.add(new HistorialRecomendacion(disco, claveDisco(disco)));
         }
         while (historial.size() > 200) historial.remove(0);
-        RecomendadorStorage.guardarHistorial(historial);
+        if (persistir) RecomendadorStorage.guardarHistorial(userId, historial);
+    }
+    private Map<String, BrazoRecomendacion> aprendizaje(String userId) {
+        return aprendizajePorUsuario.computeIfAbsent(userId, RecomendadorStorage::cargarAprendizaje);
+    }
+    private List<HistorialRecomendacion> historial(String userId) {
+        return historialPorUsuario.computeIfAbsent(userId, RecomendadorStorage::cargarHistorial);
     }
 }
