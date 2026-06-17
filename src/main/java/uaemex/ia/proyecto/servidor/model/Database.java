@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Repositorio en memoria con persistencia JSON para la coleccion de discos.
- * Usa singleton para compartir una unica coleccion entre todos los hilos del servidor.
+ * Fachada singleton para la coleccion escolar persistida en SQLite.
  */
 public class Database {
 
@@ -21,8 +20,7 @@ public class Database {
      */
     private Database() {
         repositorio = new SqliteAlbumRepository(DbConfig.url());
-        LOGGER.info(() -> "Base SQLite lista. Coleccion default-user: "
-                + repositorio.contar("default-user") + " disco(s).");
+        LOGGER.info(() -> "Base SQLite lista. Coleccion: " + repositorio.contar() + " disco(s).");
     }
 
     /**
@@ -48,12 +46,12 @@ public class Database {
      * @param disco disco a guardar.
      */
     public synchronized void guardar(Disco disco) {
-        guardar("default-user", disco);
+        repositorio.guardar(disco);
+        LOGGER.info(() -> "Disco guardado: " + disco);
     }
 
     public synchronized void guardar(String userId, Disco disco) {
-        repositorio.guardar(userId, disco);
-        LOGGER.info(() -> "Disco guardado: " + disco);
+        guardar(disco);
     }
 
     /**
@@ -66,14 +64,22 @@ public class Database {
     }
 
     public synchronized List<Disco> obtenerTodos(String userId) {
-        return repositorio.listar(userId);
+        return repositorio.listar();
     }
 
     public synchronized List<Disco> obtenerPagina(String userId, int pagina, int tamano) {
-        return repositorio.listarPagina(userId, pagina, tamano);
+        return repositorio.listarPagina(pagina, tamano);
     }
 
     public synchronized int contar(String userId) {
-        return repositorio.contar(userId);
+        return repositorio.contar();
+    }
+
+    public synchronized boolean existe(Disco disco) {
+        return repositorio.existe(disco);
+    }
+
+    public synchronized List<Disco> buscarCandidatos(String consulta, int limite) {
+        return repositorio.buscarCandidatos(consulta, limite);
     }
 }

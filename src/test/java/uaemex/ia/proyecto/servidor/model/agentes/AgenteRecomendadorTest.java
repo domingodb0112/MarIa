@@ -11,55 +11,32 @@ import java.util.Random;
 import static org.junit.Assert.*;
 
 public class AgenteRecomendadorTest {
-    private static final String USER_A = "test-user-a";
-    private static final String USER_B = "test-user-b";
-
     @Test
     public void feedbackPositivoConvergeHaciaValorAlto() {
         AgenteRecomendador recomendador = new AgenteRecomendador(new Random(7));
-        Disco disco = salsa();
+        for (int i = 0; i < 30; i++) recomendador.registrarRetroalimentacion(salsa(), true);
 
-        for (int i = 0; i < 30; i++) {
-            recomendador.registrarRetroalimentacion(USER_A, disco, true);
-        }
-
-        assertTrue(recomendador.valorAprendido(USER_A, "genero:salsa") > 0.95);
-        assertTrue(recomendador.valorAprendido(USER_A, "artista:orquesta prueba") > 0.95);
+        assertTrue(recomendador.valorAprendido("default-user", "genero:salsa") > 0.95);
+        assertTrue(recomendador.valorAprendido("default-user", "artista:orquesta prueba") > 0.95);
     }
 
     @Test
     public void feedbackNegativoConvergeHaciaValorBajo() {
         AgenteRecomendador recomendador = new AgenteRecomendador(new Random(7));
-        Disco disco = jazz();
+        for (int i = 0; i < 30; i++) recomendador.registrarRetroalimentacion(jazz(), false);
 
-        for (int i = 0; i < 30; i++) {
-            recomendador.registrarRetroalimentacion(USER_A, disco, false);
-        }
-
-        assertTrue(recomendador.valorAprendido(USER_A, "genero:jazz") < -0.95);
-    }
-
-    @Test
-    public void aprendizajeSeAislaPorUsuario() {
-        AgenteRecomendador recomendador = new AgenteRecomendador(new Random(3));
-
-        recomendador.registrarRetroalimentacion(USER_A, salsa(), true);
-        recomendador.registrarRetroalimentacion(USER_B, salsa(), false);
-
-        assertTrue(recomendador.valorAprendido(USER_A, "genero:salsa") > 0.0);
-        assertTrue(recomendador.valorAprendido(USER_B, "genero:salsa") < 0.0);
+        assertTrue(recomendador.valorAprendido("default-user", "genero:jazz") < -0.95);
     }
 
     @Test
     public void bandidoEpsilonGreedyPrefiereGeneroReforzado() {
         AgenteRecomendador recomendador = new AgenteRecomendador(new Random(11));
-
         for (int i = 0; i < 25; i++) {
-            recomendador.registrarRetroalimentacion(USER_A, salsa(), true);
-            recomendador.registrarRetroalimentacion(USER_A, jazz(), false);
+            recomendador.registrarRetroalimentacion(salsa(), true);
+            recomendador.registrarRetroalimentacion(jazz(), false);
         }
 
-        List<Disco> sugerencias = recomendador.recomendar(USER_A, perfilVacio(), Collections.emptyList());
+        List<Disco> sugerencias = recomendador.recomendar(perfilVacio(), Collections.emptyList());
 
         assertFalse(sugerencias.isEmpty());
         assertEquals("Salsa", sugerencias.get(0).getGenero());

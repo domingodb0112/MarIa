@@ -15,34 +15,46 @@ public class SqliteAlbumRepositoryTest {
     public TemporaryFolder temp = new TemporaryFolder();
 
     @Test
-    public void segmentaPorUsuarioYPaginaResultados() throws Exception {
-        File db = temp.newFile("maria-test.sqlite");
-        SqliteAlbumRepository repo = new SqliteAlbumRepository("jdbc:sqlite:" + db.getAbsolutePath());
+    public void paginaResultadosDeColeccionEscolar() throws Exception {
+        SqliteAlbumRepository repo = repo("maria-test.sqlite");
+        repo.guardar(disco("Uno", "Grupo A"));
+        repo.guardar(disco("Dos", "Grupo B"));
+        repo.guardar(disco("Tres", "Grupo C"));
 
-        repo.guardar("ana", disco("Uno", "Grupo A"));
-        repo.guardar("ana", disco("Dos", "Grupo B"));
-        repo.guardar("ana", disco("Tres", "Grupo C"));
-        repo.guardar("luis", disco("Otro", "Grupo D"));
+        List<Disco> pagina = repo.listarPagina(1, 2);
 
-        List<Disco> pagina = repo.listarPagina("ana", 1, 2);
-
-        assertEquals(3, repo.contar("ana"));
-        assertEquals(1, repo.contar("luis"));
+        assertEquals(3, repo.contar());
         assertEquals(1, pagina.size());
         assertEquals("Tres", pagina.get(0).getTitulo());
     }
 
     @Test
-    public void evitaDuplicadosDentroDelMismoUsuario() throws Exception {
-        File db = temp.newFile("maria-duplicados.sqlite");
-        SqliteAlbumRepository repo = new SqliteAlbumRepository("jdbc:sqlite:" + db.getAbsolutePath());
+    public void evitaDuplicadosEnColeccionUnica() throws Exception {
+        SqliteAlbumRepository repo = repo("maria-duplicados.sqlite");
+        Disco disco = disco("Uno", "Grupo A");
 
-        repo.guardar("ana", disco("Uno", "Grupo A"));
-        repo.guardar("ana", disco("Uno", "Grupo A"));
-        repo.guardar("luis", disco("Uno", "Grupo A"));
+        repo.guardar(disco);
+        repo.guardar(disco);
 
-        assertEquals(1, repo.contar("ana"));
-        assertEquals(1, repo.contar("luis"));
+        assertEquals(1, repo.contar());
+        assertTrue(repo.existe(disco));
+    }
+
+    @Test
+    public void buscaCandidatosDesdeSqlite() throws Exception {
+        SqliteAlbumRepository repo = repo("maria-busqueda.sqlite");
+        repo.guardar(new Disco("Bocanada", "Gustavo Cerati", 1999, "Rock", "CD"));
+        repo.guardar(new Disco("Kind of Blue", "Miles Davis", 1959, "Jazz", "Vinilo"));
+
+        List<Disco> resultados = repo.buscarCandidatos("jazz", 10);
+
+        assertEquals(1, resultados.size());
+        assertEquals("Kind of Blue", resultados.get(0).getTitulo());
+    }
+
+    private SqliteAlbumRepository repo(String nombre) throws Exception {
+        File db = temp.newFile(nombre);
+        return new SqliteAlbumRepository("jdbc:sqlite:" + db.getAbsolutePath(), false);
     }
 
     private Disco disco(String titulo, String artista) {

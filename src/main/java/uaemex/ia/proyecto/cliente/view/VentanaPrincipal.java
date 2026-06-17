@@ -20,13 +20,13 @@ public class VentanaPrincipal extends JFrame {
     private JTextArea areaLog;
 
     public VentanaPrincipal(String host, int puerto) {
-        this(host, puerto, "default-user", null);
+        this(host, puerto, null);
     }
 
-    public VentanaPrincipal(String host, int puerto, String userId, TlsConfig tlsConfig) {
+    public VentanaPrincipal(String host, int puerto, TlsConfig tlsConfig) {
         super("MarIA - Sistema de Recomendacion Musical");
         UIStyles.setupLookAndFeel();
-        this.presenter = new ClientPresenter(this, host, puerto, userId, tlsConfig);
+        this.presenter = new ClientPresenter(this, host, puerto, tlsConfig);
         initUI();
         presenter.conectar(); // Intenta conectar al arrancar
     }

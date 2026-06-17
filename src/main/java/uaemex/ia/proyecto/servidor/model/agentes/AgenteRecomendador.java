@@ -134,9 +134,11 @@ public class AgenteRecomendador {
         if (persistir) RecomendadorStorage.guardarHistorial(userId, historial);
     }
     private Map<String, BrazoRecomendacion> aprendizaje(String userId) {
+        if (!persistir) return aprendizajePorUsuario.computeIfAbsent(userId, id -> new HashMap<>());
         return aprendizajePorUsuario.computeIfAbsent(userId, RecomendadorStorage::cargarAprendizaje);
     }
     private List<HistorialRecomendacion> historial(String userId) {
+        if (!persistir) return historialPorUsuario.computeIfAbsent(userId, id -> new ArrayList<>());
         return historialPorUsuario.computeIfAbsent(userId, RecomendadorStorage::cargarHistorial);
     }
 }

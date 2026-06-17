@@ -10,11 +10,9 @@ MarIA es un sistema distribuido de recomendacion musical desarrollado en Java. E
 ├── data
 │   ├── catalogo.json
 │   ├── coleccion.json
-│   ├── coleccion.db                # Base de datos SQLite
-│   └── users                       # Almacenamiento aislado por usuario
-│       └── <userId>
-│           ├── recommendation_learning.json
-│           └── recommendation_history.json
+│   ├── maria.sqlite                # Base de datos SQLite
+│   ├── recommendation_learning.json
+│   └── recommendation_history.json
 ├── lib
 │   └── gson-2.10.1.jar
 ├── pom.xml
@@ -29,7 +27,7 @@ MarIA es un sistema distribuido de recomendacion musical desarrollado en Java. E
     └── test/java
 ```
 
-Los archivos principales de datos están en `data/`. `catalogo.json` funciona como catálogo base global para recomendaciones y `coleccion.json` es el conjunto inicial de discos que se utiliza para poblar la base de datos relacional SQLite (`coleccion.db`). Los datos de aprendizaje y fatiga de cada usuario se almacenan de manera aislada en `data/users/<userId>/`.
+Los archivos principales de datos están en `data/`. `catalogo.json` funciona como catálogo base global para recomendaciones y `coleccion.json` es el conjunto inicial de discos que se utiliza para poblar la base de datos relacional SQLite (`maria.sqlite`). El aprendizaje y la fatiga del recomendador se guardan en archivos JSON locales.
 
 `config.properties` centraliza la configuración de red y seguridad:
 
@@ -59,24 +57,24 @@ En el servidor:
 - `ServidorApp` inicia el servidor en el puerto e indica si se utilizará TLS.
 - `ServerController` abre el `ServerSocket` (estándar o SSL/TLS vía `TlsServerSockets`) y delega las conexiones de clientes a un `ExecutorService`.
 - `ManejadorCliente` atiende un cliente por hilo, delega a `TransactionLog` el logueo estructurado de cada mensaje entrante/saliente, y envía las solicitudes a `AccionesCliente`.
-- `AccionesCliente` orquesta la lógica de negocio multi-inquilino interactuando con los agentes correspondientes de acuerdo al `userId`.
+- `AccionesCliente` orquesta la lógica de negocio interactuando con la base SQLite y los agentes.
 - `Database` actúa como fachada delegando las peticiones a `SqliteAlbumRepository` para interactuar con SQLite de forma segura.
 - Los agentes en `servidor/model/agentes` implementan la lógica del sistema multiagente.
 
 Las clases compartidas viven en `compartido` para asegurar el protocolo de datos común:
 
 - `Disco`: modelo de álbum de música física.
-- `MensajeSocket`: petición del cliente que incluye `userId`, `pagina` y `tamanoPagina`.
+- `MensajeSocket`: petición del cliente que incluye acción, datos opcionales, `pagina` y `tamanoPagina`.
 - `RespuestaSocket`: respuesta del servidor con soporte de paginación (`listaDiscos`, `totalDiscos`).
 - `TlsConfig`: utilidades comunes para cargar claves y certificados TLS.
 
 ## Sistema multiagente
 
-El sistema multiagente se ejecuta en el modelo del servidor y procesa las peticiones aislando la identidad de cada usuario a través de su `userId`.
+El sistema multiagente se ejecuta en el modelo del servidor. Para el despliegue escolar se usa una sola colección compartida entre la laptop cliente y la laptop servidor.
 
 ### AgenteAnalizador
 
-`AgenteAnalizador` calcula estadísticas de consumo musical a partir de la colección de un usuario específico. Determina los géneros dominantes, frecuencias de artistas, décadas y calcula los porcentajes de afinidad del usuario. Su salida es un `PerfilGustos`.
+`AgenteAnalizador` calcula estadísticas de consumo musical a partir de la colección. Determina los géneros dominantes, frecuencias de artistas, décadas y porcentajes de afinidad. Su salida es un `PerfilGustos`.
 
 ### AgenteBuscador
 
@@ -85,8 +83,8 @@ El sistema multiagente se ejecuta en el modelo del servidor y procesa las petici
 ### AgenteRecomendador
 
 `AgenteRecomendador` es un singleton que genera sugerencias musicales utilizando aprendizaje por refuerzo (Bandido Multibrazo), afinidades históricas por artista/década y control de fatiga.
-* El estado del bandido y el historial de recomendaciones recientes se guardan de forma aislada por usuario en `data/users/<userId>/recommendation_learning.json` y `data/users/<userId>/recommendation_history.json`.
-* Las acciones `ACEPTAR_RECOMENDACION` y `RECHAZAR_RECOMENDACION` se rigen bajo este mismo aislamiento, permitiendo que las decisiones de un usuario no afecten las recomendaciones de otros inquilinos.
+* El estado del bandido y el historial de recomendaciones recientes se guardan en `data/recommendation_learning.json` y `data/recommendation_history.json`.
+* Las acciones `ACEPTAR_RECOMENDACION` y `RECHAZAR_RECOMENDACION` ajustan esas señales para mejorar las recomendaciones posteriores.
 
 ## Protocolo socket JSON
 
@@ -97,7 +95,6 @@ Ejemplo de solicitud paginada de colección:
 ```json
 {
   "transaccionId": "t-list-123",
-  "userId": "usuario-maria-9",
   "accion": "LISTAR_DISCOS",
   "pagina": 1,
   "tamanoPagina": 10
@@ -125,14 +122,14 @@ Respuesta del servidor con paginación y log estructurado:
 ```
 
 Cada petición en el socket es capturada por `TransactionLog` y logueada con el siguiente formato estructurado:
-`INFORMACIÓN: event=socket_received correlationId=t-list-123 userId=usuario-maria-9 remote=/127.0.0.1:54988 action=LISTAR_DISCOS page=1 size=10`
-`INFORMACIÓN: event=socket_response correlationId=t-list-123 userId=usuario-maria-9 action=LISTAR_DISCOS status=OK total=1`
+`INFORMACIÓN: event=socket_received correlationId=t-list-123 userId=default-user remote=/127.0.0.1:54988 action=LISTAR_DISCOS page=1 size=10`
+`INFORMACIÓN: event=socket_response correlationId=t-list-123 userId=default-user action=LISTAR_DISCOS status=OK total=1`
 
 ## Base de datos y catalogo
 
 La colección de discos se gestiona de forma persistente en SQLite utilizando la clase SqliteAlbumRepository.java.
 
-* **Bootstrap inicial:** Al iniciar el servidor por primera vez, si el archivo `data/coleccion.db` no existe, se ejecuta JsonCollectionBootstrap.java, el cual lee coleccion.json y migra todos los registros a la base de datos relacional SQLite bajo el usuario por defecto `default-user`.
+* **Bootstrap inicial:** Al iniciar el servidor por primera vez, si `data/maria.sqlite` está vacío, `JsonCollectionBootstrap.java` lee `coleccion.json` y migra sus registros a SQLite.
 * **Esquema:** La tabla `discos` cuenta con columnas `id`, `user_id`, `titulo`, `artista`, `anio`, `genero` y `formato`, garantizando restricciones de unicidad por combinación de `user_id`, `titulo` y `artista`.
 * **Paginación:** Todas las operaciones de listado y búsqueda incluyen cláusulas `LIMIT` y `OFFSET` en SQL para garantizar un rendimiento óptimo de la memoria del servidor.
 
@@ -149,19 +146,24 @@ mvn test
 Iniciar servidor (el puerto se obtiene de `config.properties`, por defecto `5000`):
 
 ```bash
-java -cp target/classes:lib/gson-2.10.1.jar:lib/sqlite-jdbc-3.45.1.0.jar uaemex.ia.proyecto.servidor.ServidorApp
+mvn exec:java -Dexec.mainClass="uaemex.ia.proyecto.servidor.ServidorApp"
 ```
 
 Iniciar cliente:
 
 ```bash
-java -cp target/classes:lib/gson-2.10.1.jar uaemex.ia.proyecto.cliente.ClienteApp
+mvn exec:java -Dexec.mainClass="uaemex.ia.proyecto.cliente.ClienteApp"
 ```
 
 ### Habilitar seguridad TLS
 Para forzar la comunicación encriptada:
-1. Cambia `server.tls.enabled=true` en `config.properties`.
-2. El sistema creará sockets utilizando los almacenes de llaves internos definidos por `TlsConfig`.
+1. Genera un almacén PKCS12 local para el servidor:
+   ```bash
+   keytool -genkeypair -alias maria -keyalg RSA -keysize 2048 -validity 365 \
+     -storetype PKCS12 -keystore certs/maria-keystore.p12
+   ```
+2. Exporta/importa el certificado hacia `certs/maria-truststore.p12`.
+3. Cambia `server.tls.enabled=true` y ajusta las contraseñas en `config.properties`.
 
 ## Troubleshooting
 
@@ -171,9 +173,6 @@ El archivo SQLite de la base de datos se encuentra bloqueado por otro proceso. A
 ### Error de TLS / SSL Handshake Exception
 Se produce cuando hay incompatibilidad de certificados entre cliente y servidor. Si se activa `server.tls.enabled=true`, asegúrate de que ambos extremos carguen los mismos almacenes de llaves y certificados del paquete `compartido/TlsConfig`.
 
-### Las recomendaciones de un usuario se mezclan con las de otro
-Asegúrate de que el cliente esté enviando el parámetro `userId` único en la cabecera de la trama `MensajeSocket`. De lo contrario, se utilizará el identificador por defecto `default-user`.
-
 ## Pruebas automatizadas
 
 El proyecto incluye 10 pruebas automatizadas divididas en:
@@ -181,7 +180,7 @@ El proyecto incluye 10 pruebas automatizadas divididas en:
 2. **Pruebas de idempotencia:** Verificación de no duplicidad de transacciones idénticas en caché LRU.
 3. **Pruebas del Buscador:** Testeo de distancias fonéticas y Levenshtein en español.
 4. **Pruebas de Persistencia SQLite:** Creación de tablas, inserción, paginación física y restricciones de unicidad de discos.
-5. **Pruebas de Aprendizaje Multi-Usuario:** Validación de aislamiento de gustos entre usuarios, convergencia de feedback positivo/negativo e inclinación por políticas épsilon-greedy.
+5. **Pruebas de Aprendizaje:** Validación de convergencia de feedback positivo/negativo e inclinación por políticas épsilon-greedy.
 
 Ejecutar las pruebas:
 ```bash

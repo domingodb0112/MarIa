@@ -4,3 +4,7 @@ out/
 *.class
 data/recommendation_learning.json
 data/recommendation_history.json
+data/*.sqlite
+data/*.db
+certs/
+*.p12

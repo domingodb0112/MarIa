@@ -16,19 +16,17 @@ public class ClientPresenter {
     private final VentanaPrincipal vista;
     private final String host;
     private final int puerto;
-    private final String userId;
     private final TlsConfig tlsConfig;
     private ClientController controller;
 
     public ClientPresenter(VentanaPrincipal vista, String host, int puerto) {
-        this(vista, host, puerto, "default-user", null);
+        this(vista, host, puerto, null);
     }
 
-    public ClientPresenter(VentanaPrincipal vista, String host, int puerto, String userId, TlsConfig tlsConfig) {
+    public ClientPresenter(VentanaPrincipal vista, String host, int puerto, TlsConfig tlsConfig) {
         this.vista = vista;
         this.host = host;
         this.puerto = puerto;
-        this.userId = userId == null || userId.trim().isEmpty() ? "default-user" : userId.trim();
         this.tlsConfig = tlsConfig;
         this.controller = new ClientController(host, puerto, tlsConfig);
     }
@@ -85,7 +83,7 @@ public class ClientPresenter {
     // Envía la trama en un hilo asíncrono y bloquea la botonera temporalmente
     private void enviar(String accion, Disco datos, Consumer<RespuestaSocket> onSuccess, String error) {
         vista.setBotonera(false);
-        AsyncTaskRunner.run(() -> controller.enviarMensaje(new MensajeSocket(accion, datos, userId)),
+        AsyncTaskRunner.run(() -> controller.enviarMensaje(new MensajeSocket(accion, datos)),
                 onSuccess, ex -> manejarFalloRed(error, ex), () -> vista.setBotonera(estaConectado()));
     }
 
