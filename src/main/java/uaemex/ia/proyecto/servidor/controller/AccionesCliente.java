@@ -22,7 +22,7 @@ class AccionesCliente {
 
     private final AgenteAnalizador analizador = new AgenteAnalizador();
     private final AgenteBuscador buscador = new AgenteBuscador();
-    private final AgenteRecomendador recomendador = new AgenteRecomendador();
+    private final AgenteRecomendador recomendador = AgenteRecomendador.getInstance();
 
     /**
      * Guarda un disco enviado por el cliente y recalcula el perfil de gustos.
@@ -31,12 +31,17 @@ class AccionesCliente {
      * @return respuesta de exito o error de validacion.
      */
     RespuestaSocket registrarDisco(MensajeSocket mensaje) {
+        return RegistroTransacciones.ejecutar(mensaje, () -> registrarDiscoInterno(mensaje));
+    }
+
+    private RespuestaSocket registrarDiscoInterno(MensajeSocket mensaje) {
         Disco disco = mensaje.getDatos();
-        if (disco == null) {
-            return RespuestaSocket.error(mensaje.getTransaccionId(), "Se requieren datos del disco.");
+        String error = ValidadorDiscoServidor.validar(disco);
+        if (!error.isEmpty()) return RespuestaSocket.error(mensaje.getTransaccionId(), error);
+        if (existeDisco(disco)) {
+            return RespuestaSocket.ok(mensaje.getTransaccionId(), "El disco ya existia en la coleccion.", disco);
         }
         Database.getInstance().guardar(disco);
-        // El perfil se recalcula despues del guardado para que las recomendaciones futuras cambien.
         PerfilGustos perfil = analizador.calcularPerfil(Database.getInstance().obtenerTodos());
         LOGGER.info(() -> "Perfil recalculado: " + perfil);
         return RespuestaSocket.ok(mensaje.getTransaccionId(),
@@ -74,13 +79,11 @@ class AccionesCliente {
         return RespuestaSocket.okLista(mensaje.getTransaccionId(), texto, resultados);
     }
 
-    /**
-     * Genera recomendaciones a partir del perfil calculado con la coleccion actual.
-     *
-     * @param mensaje solicitud original usada para conservar el id de transaccion.
-     * @return respuesta con discos recomendados.
-     */
     RespuestaSocket obtenerRecomendaciones(MensajeSocket mensaje) {
+        return RegistroTransacciones.ejecutar(mensaje, () -> obtenerRecomendacionesInterno(mensaje));
+    }
+
+    private RespuestaSocket obtenerRecomendacionesInterno(MensajeSocket mensaje) {
         List<Disco> coleccion = Database.getInstance().obtenerTodos();
         PerfilGustos perfil = analizador.calcularPerfil(coleccion);
         List<Disco> recomendaciones = recomendador.recomendar(perfil, coleccion);
@@ -99,6 +102,10 @@ class AccionesCliente {
      * @return respuesta que confirma el ajuste del estado aprendido.
      */
     RespuestaSocket registrarFeedbackRecomendacion(MensajeSocket mensaje, boolean aceptada) {
+        return RegistroTransacciones.ejecutar(mensaje, () -> registrarFeedbackInterno(mensaje, aceptada));
+    }
+
+    private RespuestaSocket registrarFeedbackInterno(MensajeSocket mensaje, boolean aceptada) {
         Disco disco = mensaje.getDatos();
         if (disco == null) {
             return RespuestaSocket.error(mensaje.getTransaccionId(),
@@ -109,6 +116,12 @@ class AccionesCliente {
         String resultado = aceptada ? "aceptada" : "rechazada";
         return RespuestaSocket.ok(mensaje.getTransaccionId(),
                 "Retroalimentacion registrada: recomendacion " + resultado + ".", disco);
+    }
+
+    private boolean existeDisco(Disco disco) {
+        String clave = DiscoKeys.clave(disco);
+        return Database.getInstance().obtenerTodos().stream()
+                .anyMatch(actual -> DiscoKeys.clave(actual).equals(clave));
     }
 
     /**

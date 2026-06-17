@@ -33,6 +33,42 @@ public final class SimilarityUtils {
     }
 
     /**
+     * Reduce un texto a una clave fonetica simple pensada para consultas en espanol.
+     *
+     * @param texto texto original.
+     * @return clave comparable por sonido aproximado.
+     */
+    public static String claveFoneticaEspanol(String texto) {
+        String valor = normalizar(texto);
+        if (valor.isEmpty()) {
+            return "";
+        }
+        valor = valor.replace('v', 'b')
+                .replace('z', 's')
+                .replace('x', 's')
+                .replaceAll("h", "")
+                .replaceAll("ll", "y")
+                .replaceAll("qu", "k")
+                .replaceAll("gue", "ge")
+                .replaceAll("gui", "gi")
+                .replaceAll("ce|ci", "se")
+                .replace('c', 'k')
+                .replace('q', 'k')
+                .replace('j', 'g');
+        return valor.replaceAll("(.)\\1+", "$1");
+    }
+
+    /**
+     * Agrupa anios por decada para comparar epocas musicales cercanas.
+     *
+     * @param anio anio de publicacion.
+     * @return inicio de decada o 0 si el dato no es valido.
+     */
+    public static int decada(int anio) {
+        return anio > 0 ? (anio / 10) * 10 : 0;
+    }
+
+    /**
      * Calcula la distancia Levenshtein entre dos cadenas.
      *
      * @param a primera cadena normalizada.

@@ -1,0 +1,6 @@
+target/
+out/
+.idea/
+*.class
+data/recommendation_learning.json
+data/recommendation_history.json

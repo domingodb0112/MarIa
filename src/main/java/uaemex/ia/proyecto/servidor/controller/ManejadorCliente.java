@@ -72,7 +72,7 @@ public class ManejadorCliente implements Runnable {
      * @param lineaJson texto recibido desde el socket.
      * @return respuesta serializable para enviar al cliente.
      */
-    private RespuestaSocket procesarMensaje(String lineaJson) {
+    RespuestaSocket procesarMensaje(String lineaJson) {
         MensajeSocket mensaje;
         try {
             mensaje = gson.fromJson(lineaJson, MensajeSocket.class);
@@ -86,6 +86,7 @@ public class ManejadorCliente implements Runnable {
 
         // El protocolo se mantiene explicito para que cliente y servidor compartan los mismos nombres.
         switch (mensaje.getAccion()) {
+            case "PING":                    return RespuestaSocket.ok(mensaje.getTransaccionId(), "PONG", null);
             case "REGISTRAR_DISCO":         return acciones.registrarDisco(mensaje);
             case "LISTAR_DISCOS":           return acciones.listarDiscos(mensaje);
             case "BUSCAR_ALBUM":            return acciones.buscarAlbum(mensaje);

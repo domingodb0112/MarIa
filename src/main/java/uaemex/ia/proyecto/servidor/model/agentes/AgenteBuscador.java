@@ -84,12 +84,29 @@ public class AgenteBuscador {
         }
 
         int mejor = SimilarityUtils.levenshtein(consulta, campo);
+        String consultaFonetica = SimilarityUtils.claveFoneticaEspanol(consulta);
+        String campoFonetico = SimilarityUtils.claveFoneticaEspanol(campo);
+        if (!consultaFonetica.isEmpty() && campoFonetico.contains(consultaFonetica)) {
+            mejor = Math.min(mejor, 1);
+        }
         String[] palabras = campo.split("\\s+");
         for (String palabra : palabras) {
             // Comparar palabra por palabra ayuda con titulos o artistas compuestos.
             mejor = Math.min(mejor, SimilarityUtils.levenshtein(consulta, palabra));
+            mejor = Math.min(mejor, distanciaFonetica(consultaFonetica, palabra));
         }
         return mejor;
+    }
+
+    private int distanciaFonetica(String consultaFonetica, String palabra) {
+        String palabraFonetica = SimilarityUtils.claveFoneticaEspanol(palabra);
+        if (consultaFonetica.isEmpty() || palabraFonetica.isEmpty()) {
+            return Integer.MAX_VALUE;
+        }
+        if (palabraFonetica.contains(consultaFonetica)) {
+            return 1;
+        }
+        return SimilarityUtils.levenshtein(consultaFonetica, palabraFonetica) + 1;
     }
 
     /**
