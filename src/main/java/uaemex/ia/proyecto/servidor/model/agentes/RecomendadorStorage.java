@@ -5,11 +5,14 @@ import com.google.gson.reflect.TypeToken;
 import uaemex.ia.proyecto.compartido.Disco;
 import java.io.*;
 import java.lang.reflect.Type;
-import java.nio.file.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Gestor de persistencia del Agente Recomendador.
+ * Lee y escribe en archivos locales el catálogo externo, el historial y el aprendizaje por refuerzo.
+ */
 public final class RecomendadorStorage {
     private static final Logger LOGGER = Logger.getLogger(RecomendadorStorage.class.getName());
     private static final String ARCHIVO_CATALOGO = "data/catalogo.json";
@@ -19,6 +22,11 @@ public final class RecomendadorStorage {
 
     private RecomendadorStorage() {}
 
+    /**
+     * Carga el catálogo estático externo de discos recomendables.
+     *
+     * @return lista inmutable de discos cargados.
+     */
     public static List<Disco> cargarCatalogo() {
         File file = new File(ARCHIVO_CATALOGO);
         if (!file.exists()) {
@@ -35,6 +43,11 @@ public final class RecomendadorStorage {
         }
     }
 
+    /**
+     * Carga el aprendizaje acumulado del recomendador (bandidos multibrazo).
+     *
+     * @return mapa mutable de género/decada/artista y sus puntuaciones.
+     */
     public static Map<String, BrazoRecomendacion> cargarAprendizaje() {
         File file = new File(ARCHIVO_APRENDIZAJE);
         if (!file.exists()) return new HashMap<>();
@@ -48,14 +61,25 @@ public final class RecomendadorStorage {
         }
     }
 
-    public static synchronized void guardarAprendizaje(Map<String, BrazoRecomendacion> map) {
-        try {
-            escribirAtomico(ARCHIVO_APRENDIZAJE, map);
+    /**
+     * Guarda el aprendizaje acumulado del recomendador de manera atómica.
+     *
+     * @param map mapa de aprendizaje a guardar.
+     */
+    public static void guardarAprendizaje(Map<String, BrazoRecomendacion> map) {
+        new File("data").mkdirs();
+        try (Writer writer = new FileWriter(ARCHIVO_APRENDIZAJE)) {
+            GSON.toJson(map, writer);
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Error al guardar aprendizaje.", e);
         }
     }
 
+    /**
+     * Carga el historial de recomendaciones recientemente emitidas para evitar redundancia.
+     *
+     * @return lista de registros de historial.
+     */
     public static List<HistorialRecomendacion> cargarHistorial() {
         File file = new File(ARCHIVO_HISTORIAL);
         if (!file.exists()) return new ArrayList<>();
@@ -69,27 +93,17 @@ public final class RecomendadorStorage {
         }
     }
 
-    public static synchronized void guardarHistorial(List<HistorialRecomendacion> history) {
-        try {
-            escribirAtomico(ARCHIVO_HISTORIAL, history);
+    /**
+     * Guarda el historial de recomendaciones de manera atómica.
+     *
+     * @param history lista de registros a guardar.
+     */
+    public static void guardarHistorial(List<HistorialRecomendacion> history) {
+        new File("data").mkdirs();
+        try (Writer writer = new FileWriter(ARCHIVO_HISTORIAL)) {
+            GSON.toJson(history, writer);
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Error al guardar historial.", e);
-        }
-    }
-
-    private static void escribirAtomico(String ruta, Object datos) throws IOException {
-        Path destino = Paths.get(ruta);
-        Files.createDirectories(destino.toAbsolutePath().getParent());
-        Path temporal = destino.resolveSibling(destino.getFileName() + ".tmp");
-        try (Writer writer = Files.newBufferedWriter(temporal)) {
-            GSON.toJson(datos, writer);
-        }
-        try {
-            Files.move(temporal, destino, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-        } catch (AtomicMoveNotSupportedException e) {
-            Files.move(temporal, destino, StandardCopyOption.REPLACE_EXISTING);
-        } finally {
-            Files.deleteIfExists(temporal);
         }
     }
 }

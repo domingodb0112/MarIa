@@ -2,13 +2,19 @@ package uaemex.ia.proyecto.servidor.model.agentes;
 
 import org.junit.Test;
 import uaemex.ia.proyecto.compartido.Disco;
-
 import java.util.Arrays;
 import java.util.List;
-
 import static org.junit.Assert.*;
 
+/**
+ * Pruebas unitarias para el Agente Buscador y utilidades de similitud fonética.
+ */
 public class AgenteBuscadorTest {
+
+    /**
+     * Valida que búsquedas aproximadas basadas en fonética en español encuentren coincidencias.
+     * Ejemplo: Buscar "Serati" debe dar como resultado a "Cerati".
+     */
     @Test
     public void encuentraCoincidenciasFoneticasEnEspanol() {
         AgenteBuscador buscador = new AgenteBuscador();
@@ -22,6 +28,9 @@ public class AgenteBuscadorTest {
         assertEquals("Gustavo Cerati", resultados.get(0).getArtista());
     }
 
+    /**
+     * Verifica que se eliminen correctamente los acentos y se calulen las décadas de manera uniforme.
+     */
     @Test
     public void normalizaAcentosYCalculaDecada() {
         assertEquals("cancion del mariachi", SimilarityUtils.normalizar("Canción del Mariachi"));

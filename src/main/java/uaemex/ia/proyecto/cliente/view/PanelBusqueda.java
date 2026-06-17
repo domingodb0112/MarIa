@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
 
+/**
+ * Componente visual modular que encapsula el formulario de búsqueda de álbumes.
+ * Cumple con la regla de diseño modular para mantener los archivos bajo 150 líneas.
+ */
 class PanelBusqueda extends JPanel {
     private final JTextField campoBusqueda = new JTextField();
     private final JButton btnBuscar = new JButton("Buscar");
@@ -17,14 +21,23 @@ class PanelBusqueda extends JPanel {
         construir();
     }
 
+    /**
+     * Limpia el campo de texto de búsqueda.
+     */
     void limpiar() {
         campoBusqueda.setText("");
     }
 
+    /**
+     * Controla el estado de habilitación del botón de búsqueda.
+     *
+     * @param enabled true para activar el botón.
+     */
     void setBotonera(boolean enabled) {
         btnBuscar.setEnabled(enabled);
     }
 
+    // Ensambla el layout GridBagLayout para el campo y etiqueta
     private void construir() {
         GridBagConstraints gc = baseConstraints();
         add(UIStyles.crearEtiqueta("Consulta:"), gc);
@@ -33,6 +46,7 @@ class PanelBusqueda extends JPanel {
         gc.gridx = 1;
         gc.weightx = 1.0;
         add(campoBusqueda, gc);
+        
         UIStyles.estilizarBotonSecundario(btnBuscar);
         btnBuscar.addActionListener(e -> buscar());
         gc.gridx = 0;
@@ -41,6 +55,7 @@ class PanelBusqueda extends JPanel {
         add(btnBuscar, gc);
     }
 
+    // Inicializa la configuración base del GridBagConstraints
     private GridBagConstraints baseConstraints() {
         GridBagConstraints gc = new GridBagConstraints();
         gc.insets = new Insets(6, 8, 6, 8);
@@ -51,6 +66,7 @@ class PanelBusqueda extends JPanel {
         return gc;
     }
 
+    // Valida y despacha la búsqueda hacia el callback del presentador
     private void buscar() {
         String consulta = campoBusqueda.getText().trim();
         if (consulta.isEmpty()) {

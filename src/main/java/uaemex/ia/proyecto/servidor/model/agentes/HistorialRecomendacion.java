@@ -3,7 +3,8 @@ package uaemex.ia.proyecto.servidor.model.agentes;
 import uaemex.ia.proyecto.compartido.Disco;
 
 /**
- * Registro serializable de una recomendacion emitida por MarIA.
+ * Modelo que registra una recomendación emitida por el sistema con fines de
+ * control de fatiga (evita recomendar álbumes y artistas idénticos en periodos cercanos).
  */
 class HistorialRecomendacion {
     private String claveDisco;
@@ -22,7 +23,7 @@ class HistorialRecomendacion {
         this.artista = disco.getArtista();
         this.genero = disco.getGenero();
         this.anio = disco.getAnio();
-        this.timestamp = System.currentTimeMillis();
+        this.timestamp = System.currentTimeMillis(); // Guarda la marca de tiempo de emisión
     }
 
     String getClaveDisco() {

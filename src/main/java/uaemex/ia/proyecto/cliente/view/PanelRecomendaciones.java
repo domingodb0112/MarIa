@@ -1,12 +1,15 @@
 package uaemex.ia.proyecto.cliente.view;
 
 import uaemex.ia.proyecto.compartido.Disco;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Componente visual modular que encapsula la sección de visualización y
+ * retroalimentación de recomendaciones del motor de Inteligencia Artificial.
+ */
 class PanelRecomendaciones extends JPanel {
     private final JButton btnRecomendaciones = new JButton("Obtener Recomendaciones");
     private final JComboBox<Disco> comboRecomendaciones = new JComboBox<>();
@@ -26,6 +29,11 @@ class PanelRecomendaciones extends JPanel {
         construir();
     }
 
+    /**
+     * Carga las recomendaciones en el ComboBox y actualiza la habilitación de botones.
+     *
+     * @param recomendaciones lista de discos recomendados por el servidor.
+     */
     void actualizarRecomendaciones(List<Disco> recomendaciones) {
         DefaultComboBoxModel<Disco> modelo = new DefaultComboBoxModel<>();
         if (recomendaciones != null) recomendaciones.forEach(modelo::addElement);
@@ -33,11 +41,17 @@ class PanelRecomendaciones extends JPanel {
         actualizarEstadoFeedback(btnRecomendaciones.isEnabled());
     }
 
+    /**
+     * Habilita o deshabilita los controles del panel según el estado de red.
+     *
+     * @param enabled true para activar acciones de usuario.
+     */
     void setBotonera(boolean enabled) {
         btnRecomendaciones.setEnabled(enabled);
         actualizarEstadoFeedback(enabled);
     }
 
+    // Ubica los componentes en una cuadrícula vertical GridBagLayout
     private void construir() {
         JLabel descripcion = UIStyles.crearEtiqueta("Basadas en tus generos registrados");
         prepararBotones();
@@ -78,6 +92,7 @@ class PanelRecomendaciones extends JPanel {
         return gc;
     }
 
+    // Evalúa si habilitar el combobox y botones según si hay ítems recomendados
     private void actualizarEstadoFeedback(boolean enabled) {
         boolean tiene = comboRecomendaciones.getItemCount() > 0;
         comboRecomendaciones.setEnabled(enabled && tiene);
@@ -85,6 +100,7 @@ class PanelRecomendaciones extends JPanel {
         btnRechazar.setEnabled(enabled && tiene);
     }
 
+    // Despacha el callback con la selección de la recomendación actual
     private void enviarFeedback(Consumer<Disco> callback) {
         Disco seleccionado = (Disco) comboRecomendaciones.getSelectedItem();
         if (seleccionado == null) {
