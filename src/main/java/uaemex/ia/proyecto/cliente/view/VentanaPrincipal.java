@@ -5,6 +5,10 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * Ventana principal y contenedor raíz de la interfaz visual del cliente.
+ * Administra los subpaneles modulares (Estadísticas, Formularios, Consultas).
+ */
 public class VentanaPrincipal extends JFrame {
     private static final int ANCHO = 860, ALTO = 520;
     private final ClientPresenter presenter;
@@ -19,9 +23,10 @@ public class VentanaPrincipal extends JFrame {
         UIStyles.setupLookAndFeel();
         this.presenter = new ClientPresenter(this, host, puerto);
         initUI();
-        presenter.conectar();
+        presenter.conectar(); // Intenta conectar al arrancar
     }
 
+    // Inicializa la configuración de la ventana y coloca subpaneles
     private void initUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(ANCHO, ALTO);
@@ -33,6 +38,7 @@ public class VentanaPrincipal extends JFrame {
         raiz.setBorder(new EmptyBorder(14, 16, 12, 16));
         setContentPane(raiz);
 
+        // Añade título arriba, formulario a la izquierda, área de logs al centro, stats a la derecha y barra de estado abajo
         raiz.add(crearPanelTitulo(), BorderLayout.NORTH);
         panelConsultas = new PanelConsultas(presenter::buscarAlbum, presenter::obtenerRecomendaciones,
                 presenter::aceptarRecomendacion, presenter::rechazarRecomendacion);
@@ -70,6 +76,7 @@ public class VentanaPrincipal extends JFrame {
         return scroll;
     }
 
+    // Escribe logs del sistema
     public void log(String linea) {
         areaLog.append(linea + "\n");
         areaLog.setCaretPosition(areaLog.getDocument().getLength());
@@ -88,6 +95,7 @@ public class VentanaPrincipal extends JFrame {
         panelFormulario.limpiarFormulario();
     }
 
+    // Actualiza recomendaciones en el panel de feedback y el dashboard lateral
     public void actualizarRecomendaciones(java.util.List<Disco> recomendaciones) {
         panelConsultas.actualizarRecomendaciones(recomendaciones);
         panelEstadisticas.actualizarRecomendaciones(recomendaciones);
@@ -105,6 +113,7 @@ public class VentanaPrincipal extends JFrame {
         panelEstado.marcarConectado(host, puerto);
     }
 
+    // Deshabilita botoneras al perder la conexión
     public void marcarDesconectado() {
         panelEstado.marcarDesconectado();
         setBotonera(false);

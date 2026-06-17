@@ -7,6 +7,10 @@ import uaemex.ia.proyecto.compartido.RespuestaSocket;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Presentador de la ventana principal.
+ * Coordina la comunicación de red con las actualizaciones visuales del Swing.
+ */
 public class ClientPresenter {
     private final VentanaPrincipal vista;
     private final String host;
@@ -24,41 +28,52 @@ public class ClientPresenter {
 
     public void desconectar() { if (controller != null) controller.desconectar(); }
 
+    /**
+     * Intenta conectar con el servidor de sockets de forma asíncrona (segundo plano).
+     */
     public void conectar() {
         vista.setBotonera(false);
         vista.setReconectarEnabled(false);
         desconectar();
         controller = new ClientController(host, puerto);
+        // Evita colgar el EDT al realizar la conexión de red
         AsyncTaskRunner.run(() -> { controller.conectar(); return null; },
             ok -> conexionExitosa(), this::conexionFallida, () -> vista.setReconectarEnabled(true));
     }
 
+    // Pide registrar un disco físico
     public void registrarDisco(Disco disco) {
         enviar("REGISTRAR_DISCO", disco, this::mostrarRegistro, "Fallo en la comunicacion");
     }
 
+    // Pide la colección completa para mostrarla y actualizar el tablero
     public void listarColeccion() {
         enviar("LISTAR_DISCOS", null, r -> mostrarLista("Coleccion", r), "Fallo al listar");
     }
 
+    // Pide buscar un álbum por texto de coincidencia difusa
     public void buscarAlbum(String consulta) {
         Disco filtro = new Disco();
         filtro.setTitulo(consulta);
         enviar("BUSCAR_ALBUM", filtro, r -> mostrarLista("Busqueda", r), "Fallo al buscar");
     }
 
+    // Solicita recomendaciones personalizadas al servidor
     public void obtenerRecomendaciones() {
         enviar("OBTENER_RECOMENDACIONES", null, this::mostrarRecomendaciones, "Fallo al obtener recomendaciones");
     }
 
+    // Informa feedback de aceptación
     public void aceptarRecomendacion(Disco disco) {
         enviar("ACEPTAR_RECOMENDACION", disco, this::mostrarFeedback, "Fallo al enviar retroalimentacion");
     }
 
+    // Informa feedback de rechazo
     public void rechazarRecomendacion(Disco disco) {
         enviar("RECHAZAR_RECOMENDACION", disco, this::mostrarFeedback, "Fallo al enviar retroalimentacion");
     }
 
+    // Envía la trama en un hilo asíncrono y bloquea la botonera temporalmente
     private void enviar(String accion, Disco datos, Consumer<RespuestaSocket> onSuccess, String error) {
         vista.setBotonera(false);
         AsyncTaskRunner.run(() -> controller.enviarMensaje(new MensajeSocket(accion, datos)),
@@ -68,7 +83,7 @@ public class ClientPresenter {
     private void mostrarRegistro(RespuestaSocket r) {
         if (!"OK".equals(r.getStatus())) { vista.log("[ERROR] " + r.getMensaje()); return; }
         vista.log("[OK] " + r.getMensaje() + " -> " + r.getDatos());
-        vista.agregarDiscoEstadisticas(r.getDatos());
+        vista.agregarDiscoEstadisticas(r.getDatos()); // Añade al dashboard
         vista.limpiarFormulario();
     }
 
@@ -79,7 +94,7 @@ public class ClientPresenter {
         if (lista != null) {
             for (Disco d : lista) vista.log("  • " + d);
         }
-        if ("Coleccion".equals(titulo)) vista.actualizarEstadisticasColeccion(lista);
+        if ("Coleccion".equals(titulo)) vista.actualizarEstadisticasColeccion(lista); // Actualiza dashboard
     }
 
     private void mostrarRecomendaciones(RespuestaSocket r) {
@@ -89,14 +104,13 @@ public class ClientPresenter {
 
     private void mostrarFeedback(RespuestaSocket r) {
         if (!"OK".equals(r.getStatus())) { vista.log("[ERROR] " + r.getMensaje()); return; }
-        vista.log("[MarIA Aprendizaje] " + r.getMensaje() + " -> " + r.getDatos());
+        vista.log("[MarIA] " + r.getMensaje() + " -> " + r.getDatos());
     }
 
     private void conexionExitosa() {
         vista.marcarConectado(host, puerto);
         vista.setBotonera(true);
         vista.log("[MarIA] Conexion establecida.");
-        listarColeccion();
     }
 
     private void conexionFallida(Exception ex) {

@@ -1,7 +1,6 @@
 package uaemex.ia.proyecto.cliente.view;
 
 import uaemex.ia.proyecto.compartido.Disco;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Tablero compacto con estadisticas del perfil musical visible en Swing.
+ * Tablero Swing que despliega las estadísticas del perfil musical y recomendaciones.
  */
 public class PanelEstadisticasPerfil extends JPanel {
     private final JLabel lblTotal = dato("0");
@@ -31,14 +30,14 @@ public class PanelEstadisticasPerfil extends JPanel {
         add(crearListaRecomendaciones(), BorderLayout.CENTER);
     }
 
+    // Actualiza las estadísticas basadas en toda la colección del usuario
     public void actualizarColeccion(List<Disco> discos) {
         coleccion.clear();
-        if (discos != null) {
-            coleccion.addAll(discos);
-        }
+        if (discos != null) coleccion.addAll(discos);
         refrescarResumen();
     }
 
+    // Añade un disco recién registrado a las métricas del tablero
     public void agregarDisco(Disco disco) {
         if (disco != null) {
             coleccion.add(disco);
@@ -46,14 +45,14 @@ public class PanelEstadisticasPerfil extends JPanel {
         }
     }
 
+    // Muestra en la lista Swing las recomendaciones recibidas del servidor
     public void actualizarRecomendaciones(List<Disco> recomendaciones) {
         modeloRecomendaciones.clear();
         if (recomendaciones == null || recomendaciones.isEmpty()) {
             modeloRecomendaciones.addElement("Sin recomendaciones recientes");
             return;
         }
-        recomendaciones.stream()
-                .limit(5)
+        recomendaciones.stream().limit(5)
                 .map(d -> d.getTitulo() + " - " + d.getArtista())
                 .forEach(modeloRecomendaciones::addElement);
     }
@@ -95,6 +94,7 @@ public class PanelEstadisticasPerfil extends JPanel {
         return label;
     }
 
+    // Regenera los textos correspondientes a los tops del usuario
     private void refrescarResumen() {
         lblTotal.setText(String.valueOf(coleccion.size()));
         lblGenero.setText(topTexto(coleccion, Disco::getGenero));
@@ -102,33 +102,31 @@ public class PanelEstadisticasPerfil extends JPanel {
         lblDecada.setText(topDecada());
     }
 
+    // Calcula la década dominante en base al conteo de frecuencias
     private String topDecada() {
-        Map<String, Integer> conteo = new LinkedHashMap<>();
+        Map<String, Integer> c = new LinkedHashMap<>();
         for (Disco disco : coleccion) {
-            int decada = decada(disco.getAnio());
-            if (decada > 0) {
-                conteo.merge(decada + "s", 1, Integer::sum);
-            }
+            int dec = decada(disco.getAnio());
+            if (dec > 0) c.merge(dec + "s", 1, Integer::sum);
         }
-        return topEntrada(conteo);
+        return topEntrada(c);
     }
 
-    private String topTexto(List<Disco> discos, java.util.function.Function<Disco, String> extractor) {
-        Map<String, Integer> conteo = new LinkedHashMap<>();
-        for (Disco disco : discos) {
-            String valor = extractor.apply(disco);
-            if (valor != null && !valor.trim().isEmpty()) {
-                conteo.merge(valor.trim(), 1, Integer::sum);
-            }
+    // Determina el elemento de texto (artista, género) dominante
+    private String topTexto(List<Disco> list, java.util.function.Function<Disco, String> ex) {
+        Map<String, Integer> c = new LinkedHashMap<>();
+        for (Disco d : list) {
+            String val = ex.apply(d);
+            if (val != null && !val.trim().isEmpty()) c.merge(val.trim(), 1, Integer::sum);
         }
-        return topEntrada(conteo);
+        return topEntrada(c);
     }
 
+    // Recupera la entrada con la frecuencia más alta del mapa
     private String topEntrada(Map<String, Integer> conteo) {
         return conteo.entrySet().stream()
                 .max(Comparator.comparingInt(Map.Entry<String, Integer>::getValue))
-                .map(Map.Entry::getKey)
-                .orElse("Sin datos");
+                .map(Map.Entry::getKey).orElse("Sin datos");
     }
 
     private int decada(int anio) {

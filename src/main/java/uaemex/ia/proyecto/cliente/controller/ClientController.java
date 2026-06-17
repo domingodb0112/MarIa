@@ -9,6 +9,10 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
 
+/**
+ * Controlador de comunicación de red para el cliente.
+ * Se encarga de abrir y cerrar sockets TCP, enviar mensajes JSON y controlar la reconexión.
+ */
 public class ClientController {
     private static final Logger LOGGER = Logger.getLogger(ClientController.class.getName());
     private static final int CONNECT_TIMEOUT_MS = 5000, READ_TIMEOUT_MS = 7000, MAX_REINTENTOS = 4;
@@ -27,13 +31,19 @@ public class ClientController {
         this.puerto = puerto;
     }
 
+    /**
+     * Establece la conexión e inicia el latido periódico de red.
+     */
     public synchronized void conectar() throws IOException {
         desconectar();
         abrirSocket();
-        heartbeat.iniciar();
+        heartbeat.iniciar(); // Inicia el latido PING
         LOGGER.info(() -> "Conectado a " + host + ":" + puerto);
     }
 
+    /**
+     * Envía un mensaje de forma segura. Si la conexión falla, intenta reconectar con backoff.
+     */
     public synchronized RespuestaSocket enviarMensaje(MensajeSocket mensaje) throws IOException {
         if (!estaConectado()) reconectarConBackoff();
         try {
@@ -45,15 +55,16 @@ public class ClientController {
         }
     }
 
+    // Ejecuta una petición atómica de red
     private RespuestaSocket enviarUnaVez(MensajeSocket mensaje) throws IOException {
         String json = gson.toJson(mensaje);
-        salida.println(json);
+        salida.println(json); // Escribe trama en socket
         if (salida.checkError()) {
             desconectar();
             throw new IOException("No se pudo enviar el mensaje al servidor.");
         }
         try {
-            String resp = entrada.readLine();
+            String resp = entrada.readLine(); // Espera respuesta del socket
             if (resp == null) {
                 desconectar();
                 throw new IOException("El servidor cerro la conexion.");
@@ -65,6 +76,7 @@ public class ClientController {
         }
     }
 
+    // Envía el mensaje PING para validar el estado del servidor
     synchronized void enviarHeartbeat() throws IOException {
         if (!estaConectado()) reconectarConBackoff();
         RespuestaSocket respuesta = enviarUnaVez(new MensajeSocket("PING", null));
@@ -74,6 +86,7 @@ public class ClientController {
         }
     }
 
+    // Ciclo de reconexión con incrementos exponenciales de tiempo (backoff)
     private void reconectarConBackoff() throws IOException {
         IOException ultimoError = null;
         long espera = BACKOFF_INICIAL_MS;
@@ -81,18 +94,19 @@ public class ClientController {
             try {
                 desconectar();
                 abrirSocket();
-                heartbeat.iniciar();
+                heartbeat.iniciar(); // Reinicia el latido PING
                 LOGGER.info(() -> "Reconexion exitosa a " + host + ":" + puerto);
                 return;
             } catch (IOException e) {
                 ultimoError = e;
                 dormirBackoff(espera, intento);
-                espera = Math.min(espera * 2, BACKOFF_MAX_MS);
+                espera = Math.min(espera * 2, BACKOFF_MAX_MS); // Duplica el tiempo
             }
         }
         throw new IOException("No se pudo reconectar tras " + MAX_REINTENTOS + " intento(s).", ultimoError);
     }
 
+    // Instancia el Socket y prepara los flujos de lectura/escritura
     private void abrirSocket() throws IOException {
         socket = new Socket();
         socket.connect(new InetSocketAddress(host, puerto), CONNECT_TIMEOUT_MS);
@@ -115,8 +129,11 @@ public class ClientController {
         return socket != null && socket.isConnected() && !socket.isClosed();
     }
 
+    /**
+     * Cierra el socket y detiene los latidos de red.
+     */
     public synchronized void desconectar() {
-        heartbeat.detener();
+        heartbeat.detener(); // Detiene el latidor
         if (socket != null && !socket.isClosed()) {
             try { socket.close(); } catch (IOException ignored) {}
         }
