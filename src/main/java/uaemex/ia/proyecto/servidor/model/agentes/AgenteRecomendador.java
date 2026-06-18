@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 public class AgenteRecomendador {
     private static final int MAX_RECOMENDACIONES = 8;
     private static final double PESO_APRENDIZAJE = 20.0;
-    private static final double EPSILON_EXPLORACION = 0.15;
+    private static final double EPSILON_EXPLORACION = 0.15; // 15% de probabilidad de explorar opciones aleatorias
     private static final List<Disco> CATALOGO_CACHE = RecomendadorStorage.cargarCatalogo();
     private static final AgenteRecomendador INSTANCE = new AgenteRecomendador();
 
@@ -30,16 +30,20 @@ public class AgenteRecomendador {
     }
     public synchronized List<Disco> recomendar(String userId, PerfilGustos perfil, List<Disco> coleccionUsuario) {
         if (coleccionUsuario == null) coleccionUsuario = Collections.emptyList();
+        // Se crea un conjunto de claves para no recomendar discos que el usuario ya posee
         Set<String> discosExistentes = crearIndiceColeccion(coleccionUsuario);
         PerfilAfinidad afinidad = new PerfilAfinidad(coleccionUsuario);
-        List<DiscoPuntuado> candidatos;
-        candidatos = IntStream.range(0, catalogoClasico.size())
+        
+        // Puntuamos todos los discos candidatos del catalogo general que no estan en la coleccion
+        List<DiscoPuntuado> candidatos = IntStream.range(0, catalogoClasico.size())
                 .filter(i -> !discosExistentes.contains(claveDisco(catalogoClasico.get(i))))
                 .mapToObj(i -> new DiscoPuntuado(catalogoClasico.get(i),
                         calcularPuntaje(userId, perfil, afinidad, catalogoClasico.get(i), i)))
                 .collect(Collectors.toList());
 
+        // Diversificamos las recomendaciones para no agrupar demasiados discos de un solo artista
         List<Disco> recomendaciones = seleccionarDiversasPorArtista(candidatos, afinidad);
+        // Almacenamos estas recomendaciones en el historial reciente para activar el control de fatiga
         registrarHistorial(userId, recomendaciones);
         return recomendaciones;
     }
@@ -62,12 +66,18 @@ public class AgenteRecomendador {
     public synchronized void registrarRetroalimentacion(String userId, Disco disco, boolean aceptada) {
         if (disco == null || disco.getGenero() == null || disco.getGenero().trim().isEmpty()) return;
         Map<String, BrazoRecomendacion> aprendizaje = aprendizaje(userId);
+        
+        // Extraemos claves normalizadas para asociar los premios o castigos en el bandido multibrazo
         String genero = "genero:" + SimilarityUtils.normalizar(disco.getGenero());
         String artista = "artista:" + SimilarityUtils.normalizar(disco.getArtista());
         String decada = "decada:" + SimilarityUtils.decada(disco.getAnio());
+        
+        // Se registra el feedback (+1.0 si es aceptado, -1.0 si es rechazado) en cada brazo/dimensión
         registrarSenalAprendizaje(aprendizaje, genero, aceptada);
         registrarSenalAprendizaje(aprendizaje, artista, aceptada);
         registrarSenalAprendizaje(aprendizaje, decada, aceptada);
+        
+        // Se guarda persistentemente el estado del aprendizaje del recomendador
         if (persistir) RecomendadorStorage.guardarAprendizaje(userId, aprendizaje);
     }
     private void registrarSenalAprendizaje(Map<String, BrazoRecomendacion> aprendizaje, String clave, boolean aceptada) {
@@ -76,23 +86,36 @@ public class AgenteRecomendador {
     }
     private double calcularPuntaje(String userId, PerfilGustos perfil, PerfilAfinidad afinidad, Disco disco, int posicionCatalogo) {
         String genero = SimilarityUtils.normalizar(disco.getGenero());
+        
+        // Lógica de Exploración vs Explotación (Epsilon-Greedy): con un 15% de azar, agregamos ruido exploratorio
         double exploracion = random.nextDouble() < EPSILON_EXPLORACION ? random.nextDouble() * 3.0 : 0.0;
+        
+        // Refuerzo aprendido: el conocimiento extraído del historial de clics (Aceptar/Rechazar) del usuario
         double refuerzo = refuerzoAprendido(userId, disco, genero);
+        
+        // Afinidades estáticas: similitud de artista y década inferida a partir de lo que el usuario ya tiene físicamente
         double afinidadHistorica = afinidad.afinidadArtista(disco) + afinidad.afinidadDecada(disco);
+        
+        // Penalización por fatiga: restamos puntaje si el disco o artista se recomendó recientemente
         double penalizacionReciente = penalizacionHistorial(userId, disco);
 
+        // Si el usuario no tiene discos en su colección física, usamos el orden predeterminado del catálogo como base
         if (perfil == null || perfil.getTotalDiscos() == 0) {
             return 1.0 - (posicionCatalogo * 0.01) + refuerzo + exploracion - penalizacionReciente;
         }
 
+        // Puntuamos segun la representacion porcentual del genero en su coleccion fisica
         double porcentajeGenero = perfil.getPorcentajePorGenero() == null ? 0.0 :
                 perfil.getPorcentajePorGenero().entrySet().stream()
                         .filter(e -> SimilarityUtils.normalizar(e.getKey()).equals(genero))
                         .mapToDouble(Map.Entry::getValue).findFirst().orElse(0.0);
 
+        // Bonos para guiar la recomendacion: bono extra si es su genero mas consumido, o si exploramos generos nuevos
         double bonoGeneroFavorito = SimilarityUtils.normalizar(perfil.getGeneroFavorito()).equals(genero) ? 15.0 : 0.0;
         double bonoDiversidad = porcentajeGenero == 0.0 ? 5.0 : 0.0;
         double desempateCatalogo = 1.0 - (posicionCatalogo * 0.01);
+        
+        // La suma de todas las señales produce el puntaje del candidato
         return porcentajeGenero + bonoGeneroFavorito + bonoDiversidad + desempateCatalogo
                 + refuerzo + exploracion + afinidadHistorica - penalizacionReciente;
     }
@@ -109,12 +132,15 @@ public class AgenteRecomendador {
         String clave = claveDisco(disco);
         String artista = SimilarityUtils.normalizar(disco.getArtista());
         int decada = SimilarityUtils.decada(disco.getAnio());
+        // Establecemos una ventana temporal de fatiga de 7 dias
         long reciente = System.currentTimeMillis() - (7L * 24 * 60 * 60 * 1000);
+        
+        // Iteramos el historial y penalizamos con fuerza los discos o artistas repetidos recientemente
         return historial(userId).stream().filter(h -> h.getTimestamp() >= reciente)
                 .mapToDouble(h -> {
-                    if (clave.equals(h.getClaveDisco())) return 18.0;
-                    double pen = artista.equals(h.getArtistaNormalizado()) ? 3.0 : 0.0;
-                    return decada > 0 && decada == h.getDecada() ? pen + 1.0 : pen;
+                    if (clave.equals(h.getClaveDisco())) return 18.0; // Fuerte castigo si es exactamente el mismo disco
+                    double pen = artista.equals(h.getArtistaNormalizado()) ? 3.0 : 0.0; // Castigo leve si es el mismo artista
+                    return decada > 0 && decada == h.getDecada() ? pen + 1.0 : pen; // Castigo por misma decada
                 }).sum();
     }
     private Set<String> crearIndiceColeccion(List<Disco> coleccionUsuario) {
@@ -130,6 +156,7 @@ public class AgenteRecomendador {
         for (Disco disco : recomendaciones) {
             historial.add(new HistorialRecomendacion(disco, claveDisco(disco)));
         }
+        // Limitar el tamaño del historial persistente a los ultimos 200 registros
         while (historial.size() > 200) historial.remove(0);
         if (persistir) RecomendadorStorage.guardarHistorial(userId, historial);
     }

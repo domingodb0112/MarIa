@@ -28,8 +28,11 @@ public class AgenteBuscador {
             return new ArrayList<>();
         }
 
+        // Iteramos sobre cada disco de la coleccion y calculamos la distancia de similitud
         for (Disco disco : coleccion) {
             int puntaje = calcularPuntaje(consultaNormalizada, disco);
+            
+            // Si el puntaje es menor o igual al umbral permitido para la longitud de consulta, es un acierto
             if (puntaje <= umbral(consultaNormalizada.length())) {
                 // Menor distancia significa mayor similitud con la consulta.
                 candidatos.add(new ResultadoBusqueda(disco, puntaje));
@@ -42,6 +45,7 @@ public class AgenteBuscador {
                 .thenComparing(r -> SimilarityUtils.normalizar(r.getDisco().getTitulo()))
                 .thenComparing(r -> SimilarityUtils.normalizar(r.getDisco().getArtista())));
 
+        // Tomamos unicamente los primeros 10 mejores resultados de la busqueda
         List<Disco> resultados = new ArrayList<>();
         for (ResultadoBusqueda candidato : candidatos) {
             if (resultados.size() == MAX_RESULTADOS) {
@@ -61,6 +65,7 @@ public class AgenteBuscador {
      */
     private int calcularPuntaje(String consulta, Disco disco) {
         int mejor = Integer.MAX_VALUE;
+        // Comparamos la consulta contra titulo, artista y genero musical por separado, eligiendo el de menor distancia
         mejor = Math.min(mejor, distanciaCampo(consulta, disco.getTitulo()));
         mejor = Math.min(mejor, distanciaCampo(consulta, disco.getArtista()));
         mejor = Math.min(mejor, distanciaCampo(consulta, disco.getGenero()));
@@ -79,16 +84,22 @@ public class AgenteBuscador {
         if (campo.isEmpty()) {
             return Integer.MAX_VALUE;
         }
+        // Coincidencia exacta o subcadena exacta (distancia 0)
         if (campo.contains(consulta)) {
             return 0;
         }
 
+        // Distancia ortografica estándar mediante Levenshtein
         int mejor = SimilarityUtils.levenshtein(consulta, campo);
+        
+        // Coincidencia fonética: comparamos claves para tolerar errores como B/V o S/Z
         String consultaFonetica = SimilarityUtils.claveFoneticaEspanol(consulta);
         String campoFonetico = SimilarityUtils.claveFoneticaEspanol(campo);
         if (!consultaFonetica.isEmpty() && campoFonetico.contains(consultaFonetica)) {
-            mejor = Math.min(mejor, 1);
+            mejor = Math.min(mejor, 1); // Si suena igual, el error asignado es minimo (1)
         }
+        
+        // Buscamos coincidencia palabra por palabra en terminos compuestos (ej: artistas con nombres largos)
         String[] palabras = campo.split("\\s+");
         for (String palabra : palabras) {
             // Comparar palabra por palabra ayuda con titulos o artistas compuestos.
@@ -103,9 +114,11 @@ public class AgenteBuscador {
         if (consultaFonetica.isEmpty() || palabraFonetica.isEmpty()) {
             return Integer.MAX_VALUE;
         }
+        // Si la palabra fonetica contiene la consulta fonetica, asignamos distancia 1
         if (palabraFonetica.contains(consultaFonetica)) {
             return 1;
         }
+        // De lo contrario, calculamos la distancia Levenshtein entre las representaciones foneticas
         return SimilarityUtils.levenshtein(consultaFonetica, palabraFonetica) + 1;
     }
 
@@ -116,12 +129,15 @@ public class AgenteBuscador {
      * @return distancia maxima aceptada para considerar una coincidencia.
      */
     private int umbral(int longitudConsulta) {
+        // Consultas muy cortas (1-4 letras) admiten solo 1 error
         if (longitudConsulta <= 4) {
             return 1;
         }
+        // Consultas medianas (5-8 letras) admiten hasta 2 errores
         if (longitudConsulta <= 8) {
             return 2;
         }
+        // Consultas largas admiten hasta un tercio de su longitud en errores tipograficos
         return Math.max(3, longitudConsulta / 3);
     }
 }
