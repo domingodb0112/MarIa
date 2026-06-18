@@ -1,7 +1,10 @@
 package uaemex.ia.proyecto.cliente.view;
 
+import uaemex.ia.proyecto.compartido.Disco;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -11,10 +14,14 @@ import java.util.function.Consumer;
 class PanelBusqueda extends JPanel {
     private final JTextField campoBusqueda = new JTextField();
     private final JButton btnBuscar = new JButton("Buscar");
+    private final JComboBox<Disco> comboResultados = new JComboBox<>();
+    private final JButton btnAgregar = new JButton("Agregar a coleccion");
     private final Consumer<String> onBuscar;
+    private final Consumer<Disco> onAgregar;
 
-    PanelBusqueda(Consumer<String> onBuscar) {
+    PanelBusqueda(Consumer<String> onBuscar, Consumer<Disco> onAgregar) {
         this.onBuscar = onBuscar;
+        this.onAgregar = onAgregar;
         setLayout(new GridBagLayout());
         setBackground(UIStyles.COLOR_PANEL);
         setBorder(UIStyles.crearBordeTitulo("Buscar Album"));
@@ -26,6 +33,19 @@ class PanelBusqueda extends JPanel {
      */
     void limpiar() {
         campoBusqueda.setText("");
+        actualizarResultados(null);
+    }
+
+    /**
+     * Carga los resultados de busqueda para que el usuario elija uno.
+     *
+     * @param resultados discos devueltos por el servidor.
+     */
+    void actualizarResultados(List<Disco> resultados) {
+        DefaultComboBoxModel<Disco> modelo = new DefaultComboBoxModel<>();
+        if (resultados != null) resultados.forEach(modelo::addElement);
+        comboResultados.setModel(modelo);
+        actualizarEstadoResultados(btnBuscar.isEnabled());
     }
 
     /**
@@ -35,6 +55,7 @@ class PanelBusqueda extends JPanel {
      */
     void setBotonera(boolean enabled) {
         btnBuscar.setEnabled(enabled);
+        actualizarEstadoResultados(enabled);
     }
 
     // Ensambla el layout GridBagLayout para el campo y etiqueta
@@ -53,6 +74,21 @@ class PanelBusqueda extends JPanel {
         gc.gridy = 1;
         gc.gridwidth = 2;
         add(btnBuscar, gc);
+
+        gc.gridy = 2;
+        gc.gridwidth = 1;
+        add(UIStyles.crearEtiqueta("Resultados:"), gc);
+        comboResultados.setFont(UIStyles.FUENTE_BASE);
+        gc.gridx = 1;
+        add(comboResultados, gc);
+
+        UIStyles.estilizarBotonSecundario(btnAgregar);
+        btnAgregar.addActionListener(e -> agregarSeleccionado());
+        gc.gridx = 0;
+        gc.gridy = 3;
+        gc.gridwidth = 2;
+        add(btnAgregar, gc);
+        actualizarEstadoResultados(false);
     }
 
     // Inicializa la configuración base del GridBagConstraints
@@ -75,6 +111,26 @@ class PanelBusqueda extends JPanel {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
+        actualizarResultados(null);
         onBuscar.accept(consulta);
+    }
+
+    // Habilita la seleccion solo cuando hay resultados y conexion activa.
+    private void actualizarEstadoResultados(boolean enabled) {
+        boolean tieneResultados = comboResultados.getItemCount() > 0;
+        comboResultados.setEnabled(enabled && tieneResultados);
+        btnAgregar.setEnabled(enabled && tieneResultados);
+    }
+
+    // Registra en la coleccion el album seleccionado del ComboBox.
+    private void agregarSeleccionado() {
+        Disco seleccionado = (Disco) comboResultados.getSelectedItem();
+        if (seleccionado == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Selecciona un album encontrado para agregarlo.", "Validacion",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        onAgregar.accept(seleccionado);
     }
 }

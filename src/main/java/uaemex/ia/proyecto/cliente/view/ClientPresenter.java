@@ -62,7 +62,7 @@ public class ClientPresenter {
     public void buscarAlbum(String consulta) {
         Disco filtro = new Disco();
         filtro.setTitulo(consulta);
-        enviar("BUSCAR_ALBUM", filtro, r -> mostrarLista("Busqueda", r), "Fallo al buscar");
+        enviar("BUSCAR_ALBUM", filtro, this::mostrarBusqueda, "Fallo al buscar");
     }
 
     // Solicita recomendaciones personalizadas al servidor
@@ -102,6 +102,11 @@ public class ClientPresenter {
             for (Disco d : lista) vista.log("  • " + d);
         }
         if ("Coleccion".equals(titulo)) vista.actualizarEstadisticasColeccion(lista); // Actualiza dashboard
+    }
+
+    private void mostrarBusqueda(RespuestaSocket r) {
+        mostrarLista("Busqueda", r);
+        if ("OK".equals(r.getStatus())) vista.actualizarResultadosBusqueda(r.getListaDiscos());
     }
 
     private void mostrarRecomendaciones(RespuestaSocket r) {

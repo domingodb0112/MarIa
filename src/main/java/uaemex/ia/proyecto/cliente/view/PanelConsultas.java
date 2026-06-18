@@ -14,12 +14,13 @@ public class PanelConsultas extends JPanel {
     private final PanelBusqueda panelBusqueda;
     private final PanelRecomendaciones panelRecomendaciones;
 
-    public PanelConsultas(Consumer<String> onBuscar, Runnable onRecomendar,
+    public PanelConsultas(Consumer<String> onBuscar, Consumer<Disco> onAgregarBusqueda,
+                          Runnable onRecomendar,
                           Consumer<Disco> onAceptarRecomendacion,
                           Consumer<Disco> onRechazarRecomendacion) {
         setLayout(new GridLayout(2, 1, 0, 8));
         setOpaque(false);
-        panelBusqueda = new PanelBusqueda(onBuscar);
+        panelBusqueda = new PanelBusqueda(onBuscar, onAgregarBusqueda);
         panelRecomendaciones = new PanelRecomendaciones(onRecomendar,
                 onAceptarRecomendacion, onRechazarRecomendacion);
         add(panelBusqueda);
@@ -32,6 +33,10 @@ public class PanelConsultas extends JPanel {
 
     public void actualizarRecomendaciones(List<Disco> recomendaciones) {
         panelRecomendaciones.actualizarRecomendaciones(recomendaciones);
+    }
+
+    public void actualizarResultadosBusqueda(List<Disco> resultados) {
+        panelBusqueda.actualizarResultados(resultados);
     }
 
     public void setBotonera(boolean enabled) {

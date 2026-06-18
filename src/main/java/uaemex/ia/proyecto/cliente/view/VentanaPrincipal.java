@@ -45,8 +45,9 @@ public class VentanaPrincipal extends JFrame {
 
         // Añade título arriba, formulario a la izquierda, área de logs al centro, stats a la derecha y barra de estado abajo
         raiz.add(crearPanelTitulo(), BorderLayout.NORTH);
-        panelConsultas = new PanelConsultas(presenter::buscarAlbum, presenter::obtenerRecomendaciones,
-                presenter::aceptarRecomendacion, presenter::rechazarRecomendacion);
+        panelConsultas = new PanelConsultas(presenter::buscarAlbum, presenter::registrarDisco,
+                presenter::obtenerRecomendaciones, presenter::aceptarRecomendacion,
+                presenter::rechazarRecomendacion);
         panelFormulario = new PanelFormulario(presenter::registrarDisco, presenter::listarColeccion, presenter::conectar, panelConsultas);
         raiz.add(panelFormulario, BorderLayout.WEST);
         raiz.add(crearPanelLog(), BorderLayout.CENTER);
@@ -104,6 +105,10 @@ public class VentanaPrincipal extends JFrame {
     public void actualizarRecomendaciones(java.util.List<Disco> recomendaciones) {
         panelConsultas.actualizarRecomendaciones(recomendaciones);
         panelEstadisticas.actualizarRecomendaciones(recomendaciones);
+    }
+
+    public void actualizarResultadosBusqueda(java.util.List<Disco> resultados) {
+        panelConsultas.actualizarResultadosBusqueda(resultados);
     }
 
     public void actualizarEstadisticasColeccion(java.util.List<Disco> discos) {
